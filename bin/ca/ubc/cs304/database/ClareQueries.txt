@@ -1,0 +1,39 @@
+
+Insert Operation
+- Add a new PlayerCharacter to the Assassin subclass
+
+INSERT INTO PlayerCharacter VALUES (?,?,?,?);
+INSERT INTO Assassin VALUES (?,?,?);
+
+Update Operation
+- Update the Location’s Biome
+
+UPDATE Location
+SET Biome = ?
+WHERE Name = ?
+
+Projection
+- Project on the attributes ItemID, Stats, ShopName, LocationName, and PlayerUsername from Item_Equip_Sells
+
+SELECT ItemID, Stats, ShopName, LocationName, PlayerUsername
+FROM Item_Equip_Sells
+
+Aggregation with Group By
+- Count the number of monster Races grouped by Location from Monster_isAt
+
+SELECT LocationName, Count(Race)
+FROM Monster_isAt
+GROUP BY LocationName
+
+Nested Aggregation with Group By
+- Average the price of each shop grouped by shopType and locationName from Item_Equips_sells having the itemId greater than 10000.
+- From the aggregation above, find the max price at each locationName.
+
+SELECT locationName, MAX(avgPrice)
+FROM Item_Equips_Sells I
+WHERE   (SELECT locationName, shopType, AVG(price) AS avgPrice
+           FROM Item_Equips_Sells
+          WHERE itemID > 10000
+       GROUP BY shopType, locationName)
+GROUP BY locationName
+

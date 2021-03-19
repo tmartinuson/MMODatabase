@@ -15,7 +15,8 @@ public interface TerminalTransactionsDelegate {
 	public void databaseSetup();
 	
 	public void deleteBranch(int branchId);
-	public void insertBranch(BranchModel model);
+	public void insertAssassinPlayerCharacter(String username, String id, int money,
+											  int xp, int attackPower);
 	public void showBranch();
 	public void updateBranch(int branchId, String name);
 	

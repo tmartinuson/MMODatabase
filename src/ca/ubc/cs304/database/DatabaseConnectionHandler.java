@@ -62,23 +62,30 @@ public class DatabaseConnectionHandler {
 		}
 	}
 	
-	public void insertBranch(BranchModel model) {
+	public void insertAssassinPlayerCharacter(String username, String id, int money,
+											  int xp, int attackPower) {
 		try {
-			PreparedStatement ps = connection.prepareStatement("INSERT INTO branch VALUES (?,?,?,?,?)");
-			ps.setInt(1, model.getId());
-			ps.setString(2, model.getName());
-			ps.setString(3, model.getAddress());
-			ps.setString(4, model.getCity());
-			if (model.getPhoneNumber() == 0) {
+			PreparedStatement ps = connection.prepareStatement("INSERT INTO PlayerCharacter VALUES (?,?,?,?)");
+			ps.setString(1, username);
+			ps.setString(2, id);
+			ps.setInt(3, money);
+			ps.setInt(4, xp);
+			/*if (xp == 0) {
 				ps.setNull(5, java.sql.Types.INTEGER);
 			} else {
 				ps.setInt(5, model.getPhoneNumber());
-			}
-
+			}*/
 			ps.executeUpdate();
 			connection.commit();
-
 			ps.close();
+
+			PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Assassin VALUES (?,?,?)");
+			ps2.setString(1, username);
+			ps2.setString(2, id);
+			ps2.setInt(3, attackPower);
+			ps2.executeUpdate();
+			connection.commit();
+			ps2.close();
 		} catch (SQLException e) {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 			rollbackConnection();
@@ -176,12 +183,6 @@ public class DatabaseConnectionHandler {
 		} catch (SQLException e) {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
-		
-		BranchModel branch1 = new BranchModel("123 Charming Ave", "Vancouver", 1, "First Branch", 1234567);
-		insertBranch(branch1);
-		
-		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
-		insertBranch(branch2);
 	}
 	
 	private void dropBranchTableIfExists() {

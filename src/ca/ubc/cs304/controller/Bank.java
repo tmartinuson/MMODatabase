@@ -52,10 +52,11 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	/**
 	 * TermainalTransactionsDelegate Implementation
 	 * 
-	 * Insert a branch with the given info
+	 * Insert an assassin player character with given info
 	 */
-    public void insertBranch(BranchModel model) {
-    	dbHandler.insertBranch(model);
+    public void insertAssassinPlayerCharacter(String username, String id, int money,
+							 int xp, int attackPower) {
+    	dbHandler.insertAssassinPlayerCharacter(username, id, money, xp, attackPower);
     }
 
     /**
