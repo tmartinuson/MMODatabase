@@ -51,7 +51,8 @@ CREATE TABLE PlayerCharacter(
     ID VARCHAR(10),
     Money INTEGER,
     XP INTEGER DEFAULT 0,
-    PRIMARY KEY (ID, Username),
+    PRIMARY KEY (ID),
+    UNIQUE (ID, Username),
     FOREIGN KEY (XP) REFERENCES PlayerXPLevel
 );
 
@@ -80,8 +81,9 @@ CREATE TABLE Assassin(
     Username VARCHAR(20),
     ID VARCHAR(10),
     AttackPower INTEGER,
-    PRIMARY KEY (ID, Username),
-    FOREIGN KEY (ID, Username) REFERENCES PlayerCharacter
+    PRIMARY KEY (ID),
+    UNIQUE (ID),
+    FOREIGN KEY (ID) REFERENCES PlayerCharacter
         ON DELETE CASCADE
 );
 
@@ -98,8 +100,9 @@ CREATE TABLE Warrior(
     Username VARCHAR(20),
     ID VARCHAR(10),
     DefensePower INTEGER,
-    PRIMARY KEY (ID, Username),
-    FOREIGN KEY (ID, Username) REFERENCES PlayerCharacter
+    PRIMARY KEY (ID),
+    UNIQUE (ID),
+    FOREIGN KEY (ID) REFERENCES PlayerCharacter
         ON DELETE CASCADE
 );
 
@@ -116,8 +119,9 @@ CREATE TABLE Mage(
     Username VARCHAR(20),
     ID VARCHAR(10),
     PrimarySpell VARCHAR(20),
-    PRIMARY KEY (ID, Username),
-    FOREIGN KEY (ID, Username) REFERENCES PlayerCharacter
+    PRIMARY KEY (ID),
+    UNIQUE (ID),
+    FOREIGN KEY (ID) REFERENCES PlayerCharacter
         ON DELETE CASCADE
 );
 
@@ -136,9 +140,9 @@ CREATE TABLE GamesWith(
     PartyName VARCHAR(20),
     UsernamePlayer2 VARCHAR(20),
     IDPlayer2 VARCHAR(10),
-    PRIMARY KEY (IDPlayer1, UsernamePlayer1, IDPlayer2, UsernamePlayer2),
-    FOREIGN KEY (IDPlayer1, UsernamePlayer1) REFERENCES PlayerCharacter,
-    FOREIGN KEY (IDPlayer2, UsernamePlayer2) REFERENCES PlayerCharacter
+    PRIMARY KEY (IDPlayer1, IDPlayer2),
+    FOREIGN KEY (IDPlayer1) REFERENCES PlayerCharacter,
+    FOREIGN KEY (IDPlayer2) REFERENCES PlayerCharacter
 );
 
 grant select on GamesWith to public;
@@ -155,8 +159,8 @@ CREATE TABLE Converses(
     PlayerID VARCHAR(10),
     converseDate DATE,
     NPCName VARCHAR(20),
-    PRIMARY KEY (PlayerID, PlayerUsername, NPCName),
-    FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter,
+    PRIMARY KEY (PlayerID, NPCName),
+    FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
     FOREIGN KEY (NPCName) REFERENCES NonPlayerCharacter_Gives
 );
 
@@ -214,7 +218,7 @@ CREATE TABLE Item_Equips_Sells(
     PlayerUsername VARCHAR(20),
     FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn
         ON DELETE SET NULL,
-    FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter
+    FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter
 );
 
 grant select on Item_Equips_Sells to public;
@@ -277,9 +281,9 @@ CREATE TABLE BuysFrom(
     PlayerID VARCHAR(10),
     ShopName VARCHAR(20),
     LocationName VARCHAR(20),
-    PRIMARY KEY (PlayerUsername, PlayerID, ShopName, LocationName),
+    PRIMARY KEY (PlayerID, ShopName, LocationName),
     FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn,
-    FOREIGN KEY (PlayerUsername, PlayerID) REFERENCES PlayerCharacter
+    FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter
 );
 
 grant select on BuysFrom to public;
@@ -314,9 +318,9 @@ CREATE TABLE Completes(
     LocationName VARCHAR(20),
     PlayerUsername VARCHAR(20),
     PlayerID VARCHAR(10),
-    PRIMARY KEY (LocationName, PlayerUsername, PlayerID),
+    PRIMARY KEY (LocationName, PlayerID),
     FOREIGN KEY (LocationName) REFERENCES Location,
-    FOREIGN KEY (PlayerUsername, PlayerID) REFERENCES PlayerCharacter
+    FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter
         ON DELETE CASCADE
 );
 
@@ -380,8 +384,8 @@ CREATE TABLE Fights(
     MonsterID VARCHAR(10),
     PlayerUsername VARCHAR(20),
     PlayerID VARCHAR(10),
-    PRIMARY KEY (MonsterRace, MonsterID, PlayerUsername, PlayerID),
-    FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter,
+    PRIMARY KEY (MonsterRace, MonsterID, PlayerID),
+    FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
     FOREIGN KEY (MonsterRace, MonsterID) REFERENCES Monster_IsAt
 );
 
@@ -442,8 +446,8 @@ CREATE TABLE Participates(
     PlayerUsername VARCHAR(20),
     PlayerID VARCHAR(10),
     Status SMALLINT,
-    PRIMARY KEY (QuestTitle, PlayerUsername, PlayerID),
-    FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter,
+    PRIMARY KEY (QuestTitle, PlayerID),
+    FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
     FOREIGN KEY (QuestTitle) REFERENCES Quest_Contains
 );
 
