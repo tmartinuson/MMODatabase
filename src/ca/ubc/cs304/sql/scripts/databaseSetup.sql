@@ -353,7 +353,7 @@ CREATE TABLE Monster_isAt (
     Type VARCHAR(20),
     MonsterLevel INTEGER,
     LocationName VARCHAR(20),
-    PRIMARY KEY (Race, MonsterID),
+    PRIMARY KEY (MonsterID),
     FOREIGN KEY (LocationName) REFERENCES Location,
     FOREIGN KEY (MonsterLevel) REFERENCES MLevelRewardHealth
 );
@@ -376,25 +376,24 @@ INSERT INTO Monster_isAt VALUES ('Dragon', '6744', 'Ice', 100, 'Kerning');
 
 
 CREATE TABLE Fights(
-    MonsterRace VARCHAR(20),
     MonsterID VARCHAR(10),
     PlayerUsername VARCHAR(20),
     PlayerID VARCHAR(10),
-    PRIMARY KEY (MonsterRace, MonsterID, PlayerUsername, PlayerID),
+    PRIMARY KEY (MonsterID, PlayerUsername, PlayerID),
     FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter,
-    FOREIGN KEY (MonsterRace, MonsterID) REFERENCES Monster_IsAt
+    FOREIGN KEY (MonsterID) REFERENCES Monster_IsAt
 );
 
 grant select on Fights to public;
 
-INSERT INTO Fights VALUES ('Yordle', '3017', 'Spready', '34521');
-INSERT INTO Fights VALUES ('Treeant', '2223', 'KumaClub', '33579');
-INSERT INTO Fights VALUES ('Orc', '1231', 'Doublelift', '1122');
-INSERT INTO Fights VALUES ('Angel', '1155', 'Lilyyyxx', '78');
-INSERT INTO Fights VALUES ('Demon', '2518', 'Faker', '10000');
-INSERT INTO Fights VALUES ('Mermaid', '6687', 'Faker', '10000');
-INSERT INTO Fights VALUES ('Elf', '1353', 'cinnabunz', '4567');
-INSERT INTO Fights VALUES ('Bug', '9521', 'Emiru', '26227');
+INSERT INTO Fights VALUES ('3017', 'Spready', '34521');
+INSERT INTO Fights VALUES ('2223', 'KumaClub', '33579');
+INSERT INTO Fights VALUES ('1231', 'Doublelift', '1122');
+INSERT INTO Fights VALUES ('1155', 'Lilyyyxx', '78');
+INSERT INTO Fights VALUES ('2518', 'Faker', '10000');
+INSERT INTO Fights VALUES ('6687', 'Faker', '10000');
+INSERT INTO Fights VALUES ('1353', 'cinnabunz', '4567');
+INSERT INTO Fights VALUES ('9521', 'Emiru', '26227');
 
 
 CREATE TABLE Event(
