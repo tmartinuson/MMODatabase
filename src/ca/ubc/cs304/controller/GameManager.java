@@ -3,18 +3,22 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
-import ca.ubc.cs304.model.BranchModel;
+import ca.ubc.cs304.model.LocationAndPrice;
+import ca.ubc.cs304.model.LocationRace;
+import ca.ubc.cs304.model.SimplifiedItemModel;
 import ca.ubc.cs304.ui.LoginWindow;
 import ca.ubc.cs304.ui.TerminalTransactions;
+
+import java.util.ArrayList;
 
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
+public class GameManager implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	private DatabaseConnectionHandler dbHandler = null;
 	private LoginWindow loginWindow = null;
 
-	public Bank() {
+	public GameManager() {
 		dbHandler = new DatabaseConnectionHandler();
 	}
 	
@@ -65,7 +69,7 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 * Delete branch with given branch ID.
 	 */ 
     public void deleteBranch(int branchId) {
-    	dbHandler.deleteBranch(branchId);
+    	//dbHandler.deleteBranch(branchId);
     }
     
     /**
@@ -74,41 +78,28 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 * Update the branch name for a specific ID
 	 */
 
-    public void updateBranch(int branchId, String name) {
-    	dbHandler.updateBranch(branchId, name);
+    public void updateLocationBiome(String locName, String biome) {
+    	dbHandler.updateLocationBiome(locName, biome);
     }
 
-    /**
-	 * TermainalTransactionsDelegate Implementation
-	 * 
-	 * Displays information about varies bank branches.
-	 */
-    public void showBranch() {
-    	BranchModel[] models = dbHandler.getBranchInfo();
-    	
-    	for (int i = 0; i < models.length; i++) {
-    		BranchModel model = models[i];
-    		
-    		// simplified output formatting; truncation may occur
-    		System.out.printf("%-10.10s", model.getId());
-    		System.out.printf("%-20.20s", model.getName());
-    		if (model.getAddress() == null) {
-    			System.out.printf("%-20.20s", " ");
-    		} else {
-    			System.out.printf("%-20.20s", model.getAddress());
-    		}
-    		System.out.printf("%-15.15s", model.getCity());
-    		if (model.getPhoneNumber() == 0) {
-    			System.out.printf("%-15.15s", " ");
-    		} else {
-    			System.out.printf("%-15.15s", model.getPhoneNumber());
-    		}
-    		
-    		System.out.println();
-    	}
-    }
-	
-    /**
+
+	public void countRaceByLocation() {
+    	//TODO: This is where you can print the results to the gui
+		ArrayList<LocationRace> results = dbHandler.countRaceByLocation();
+	}
+
+
+	public void nestedPriceQuery() {
+		//TODO: This is where you can print the results to the gui
+		ArrayList<LocationAndPrice> results = dbHandler.nestedPriceQuery();
+	}
+
+	public void projectFromItems() {
+		//TODO: This is where you can print the results to the gui
+		ArrayList<SimplifiedItemModel> results = dbHandler.projectFromItems();
+	}
+
+	/**
 	 * TerminalTransactionsDelegate Implementation
 	 * 
      * The TerminalTransaction instance tells us that it is done with what it's 
@@ -136,7 +127,7 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 * Main method called at launch time
 	 */
 	public static void main(String args[]) {
-		Bank bank = new Bank();
-		bank.start();
+		GameManager gameManager = new GameManager();
+		gameManager.start();
 	}
 }
