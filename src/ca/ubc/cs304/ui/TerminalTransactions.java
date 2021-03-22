@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
-import ca.ubc.cs304.model.BranchModel;
 
 /**
  * The class is only responsible for handling terminal text inputs. 
@@ -87,7 +86,7 @@ public class TerminalTransactions {
 					handleUpdateOption();
 					break;
 				case 4:  
-					delegate.showBranch(); 
+					delegate.projectFromItems();
 					break;
 				case 5:
 					handleQuitOption();
@@ -112,43 +111,8 @@ public class TerminalTransactions {
 	}
 	
 	private void handleInsertOption() {
-		int id = INVALID_INPUT;
-		while (id == INVALID_INPUT) {
-			System.out.print("Please enter the branch ID you wish to insert: ");
-			id = readInteger(false);
-		}
-		
-		String name = null;
-		while (name == null || name.length() <= 0) {
-			System.out.print("Please enter the branch name you wish to insert: ");
-			name = readLine().trim();
-		}
-		
-		// branch address is allowed to be null so we don't need to repeatedly ask for the address
-		System.out.print("Please enter the branch address you wish to insert: ");
-		String address = readLine().trim();
-		if (address.length() == 0) {
-			address = null;
-		}
-		
-		String city = null;
-		while (city == null || city.length() <= 0) {
-			System.out.print("Please enter the branch city you wish to insert: ");
-			city = readLine().trim();
-		}
-		
-		int phoneNumber = INVALID_INPUT;
-		while (phoneNumber == INVALID_INPUT) {
-			System.out.print("Please enter the branch phone number you wish to insert: ");
-			phoneNumber = readInteger(true);
-		}
-		
-		BranchModel model = new BranchModel(address,
-											city,
-											id,
-											name,
-											phoneNumber);
-		delegate.insertBranch(model);
+		// kept here to not break program, this call should pass in params entered into gui
+		delegate.insertAssassinPlayerCharacter("hard code data", "000", 3, 0, 0);
 	}
 	
 	private void handleQuitOption() {
@@ -166,19 +130,19 @@ public class TerminalTransactions {
 	}
 	
 	private void handleUpdateOption() {
-		int id = INVALID_INPUT;
-		while (id == INVALID_INPUT) {
-			System.out.print("Please enter the branch ID you wish to update: ");
-			id = readInteger(false);
-		}
-		
 		String name = null;
 		while (name == null || name.length() <= 0) {
-			System.out.print("Please enter the branch name you wish to update: ");
+			System.out.print("Please enter the location name you wish to update: ");
 			name = readLine().trim();
 		}
+		
+		String biome = null;
+		while (biome == null || biome.length() <= 0) {
+			System.out.print("Please enter the biome you wish to update: ");
+			biome = readLine().trim();
+		}
 
-		delegate.updateBranch(id, name);
+		delegate.updateLocationBiome(name, biome);
 	}
 	
 	private int readInteger(boolean allowEmpty) {

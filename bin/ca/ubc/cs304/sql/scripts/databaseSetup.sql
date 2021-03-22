@@ -47,8 +47,8 @@ INSERT INTO PlayerXPLevel VALUES (1, 65);
 INSERT INTO PlayerXPLevel VALUES (1, 34235223);
 
 CREATE TABLE PlayerCharacter(
-    Username CHAR(20),
-    ID CHAR(10),
+    Username VARCHAR(20),
+    ID VARCHAR(10),
     Money INTEGER,
     XP INTEGER DEFAULT 0,
     PRIMARY KEY (ID, Username),
@@ -77,8 +77,8 @@ INSERT INTO PlayerCharacter VALUES ('Geegee', '1098', 29957, 37452201);
 INSERT INTO PlayerCharacter VALUES ('UberHaxor', '15624', 40099932, 50000000);
 
 CREATE TABLE Assassin(
-    Username CHAR(20),
-    ID CHAR(10),
+    Username VARCHAR(20),
+    ID VARCHAR(10),
     AttackPower INTEGER,
     PRIMARY KEY (ID, Username),
     FOREIGN KEY (ID, Username) REFERENCES PlayerCharacter
@@ -95,8 +95,8 @@ INSERT INTO Assassin VALUES ('KumaClub', '33579', 270);
 INSERT INTO Assassin VALUES ('kittyx', '863', 300);
 
 CREATE TABLE Warrior(
-    Username CHAR(20),
-    ID CHAR(10),
+    Username VARCHAR(20),
+    ID VARCHAR(10),
     DefensePower INTEGER,
     PRIMARY KEY (ID, Username),
     FOREIGN KEY (ID, Username) REFERENCES PlayerCharacter
@@ -113,9 +113,9 @@ INSERT INTO Warrior VALUES ('FrameArms', '27493', 340);
 INSERT INTO Warrior VALUES ('RetroMuse', '432', 440);
 
 CREATE TABLE Mage(
-    Username CHAR(20),
-    ID CHAR(10),
-    PrimarySpell CHAR(20),
+    Username VARCHAR(20),
+    ID VARCHAR(10),
+    PrimarySpell VARCHAR(20),
     PRIMARY KEY (ID, Username),
     FOREIGN KEY (ID, Username) REFERENCES PlayerCharacter
         ON DELETE CASCADE
@@ -131,11 +131,11 @@ INSERT INTO Mage VALUES ('Geegee', '1098', 'Light Binding');
 INSERT INTO Mage VALUES ('UberHaxor', '15624', 'Pyroblast');
 
 CREATE TABLE GamesWith(
-    UsernamePlayer1 CHAR(20),
-    IDPlayer1 CHAR(10),
-    PartyName CHAR(20),
-    UsernamePlayer2 CHAR(20),
-    IDPlayer2 CHAR(10),
+    UsernamePlayer1 VARCHAR(20),
+    IDPlayer1 VARCHAR(10),
+    PartyName VARCHAR(20),
+    UsernamePlayer2 VARCHAR(20),
+    IDPlayer2 VARCHAR(10),
     PRIMARY KEY (IDPlayer1, UsernamePlayer1, IDPlayer2, UsernamePlayer2),
     FOREIGN KEY (IDPlayer1, UsernamePlayer1) REFERENCES PlayerCharacter,
     FOREIGN KEY (IDPlayer2, UsernamePlayer2) REFERENCES PlayerCharacter
@@ -151,10 +151,10 @@ INSERT INTO GamesWith VALUES ('Spready', '34521', 'Buds', 'UberHaxor', '15624');
 INSERT INTO GamesWith VALUES ('RetroMuse', '432', 'PCMR', 'cinnabunz', '4567');
 
 CREATE TABLE Converses(
-    PlayerUsername CHAR(20),
-    PlayerID CHAR(10),
+    PlayerUsername VARCHAR(20),
+    PlayerID VARCHAR(10),
     converseDate DATE,
-    NPCName CHAR(20),
+    NPCName VARCHAR(20),
     PRIMARY KEY (PlayerID, PlayerUsername, NPCName),
     FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter,
     FOREIGN KEY (NPCName) REFERENCES NonPlayerCharacter_Gives
@@ -172,7 +172,7 @@ INSERT INTO Converses VALUES ('cinnabunz', '4567', 2015-10-18, 'Braum');
 INSERT INTO Converses VALUES ('Emiru', '26227', 2020-07-29, 'Ornn');
 
 CREATE TABLE NPCQuestXP(
-    Miniquest CHAR(70) PRIMARY KEY,
+    Miniquest VARCHAR(70) PRIMARY KEY,
     RewardXP INTEGER
 );
 
@@ -186,9 +186,9 @@ INSERT INTO NPCQuestXP VALUES ('Create a party with two buddies', 5000);
 INSERT INTO NPCQuestXP VALUES ('Complete any boss raid with a buddy', 5000);
 
 CREATE TABLE NonPlayerCharacter_Gives(
-    Name CHAR(20) PRIMARY KEY,
-    Miniquest CHAR(70),
-    ItemID CHAR(10),
+    Name VARCHAR(20) PRIMARY KEY,
+    Miniquest VARCHAR(70),
+    ItemID VARCHAR(10),
     FOREIGN KEY (ItemID) REFERENCES Item_Equips_Sells,
     FOREIGN KEY (Miniquest) REFERENCES NPCQuestXP
 );
@@ -206,12 +206,12 @@ INSERT INTO NonPlayerCharacter_Gives VALUES ('Ornn', 'Craft gold armor', '5332')
 
 CREATE TABLE Item_Equips_Sells(
     Price INTEGER,
-    ItemID CHAR(10) PRIMARY KEY,
-    Stats CHAR(40),
-    ShopName CHAR(20) NOT NULL,
-    LocationName CHAR(20) NOT NULL,
-    PlayerID CHAR(10),
-    PlayerUsername CHAR(20),
+    ItemID VARCHAR(10) PRIMARY KEY,
+    Stats VARCHAR(40),
+    ShopName VARCHAR(20) NOT NULL,
+    LocationName VARCHAR(20) NOT NULL,
+    PlayerID VARCHAR(10),
+    PlayerUsername VARCHAR(20),
     FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn
         ON DELETE SET NULL,
     FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter
@@ -235,8 +235,8 @@ INSERT INTO Item_Equips_Sells VALUES (4000, '15699', '+20 Illumination for Dark 
 INSERT INTO Item_Equips_Sells VALUES (186362, '5332', '+15 Defense', 'Armure', 'Perion', 'Emiru', '26227');
 
 CREATE TABLE Rewards(
-    ItemID CHAR(10),
-    EventName CHAR(30) NOT NULL,
+    ItemID VARCHAR(10),
+    EventName VARCHAR(30) NOT NULL,
     EventStartDate DATE NOT NULL,
     EventEndDate DATE NOT NULL,
     PRIMARY KEY (ItemID, EventName, EventStartDate, EventEndDate),
@@ -253,9 +253,9 @@ INSERT INTO Rewards VALUES ('15699', 'Scare Away the Darkness', 2021-01-01, 2021
 INSERT INTO Rewards VALUES ('5332', 'Hold The Door', 2016-05-22, 2016-05-23);
 
 CREATE TABLE Shop_IsIn(
-    LocationName CHAR(20),
-    ShopName CHAR(20),
-    Type CHAR(20),
+    LocationName VARCHAR(20),
+    ShopName VARCHAR(20),
+    Type VARCHAR(20),
     InventoryAmount INTEGER,
     PRIMARY KEY (LocationName, ShopName),
     FOREIGN KEY (LocationName) REFERENCES Location
@@ -273,10 +273,10 @@ INSERT INTO Shop_IsIn VALUES ('Armure', 'Perion', 'Armor', 100);
 INSERT INTO Shop_IsIn VALUES ('SpellingsBees', 'Ellinia', 'Magic', 50);
 
 CREATE TABLE BuysFrom(
-    PlayerUsername CHAR(20),
-    PlayerID CHAR(10),
-    ShopName CHAR(20),
-    LocationName CHAR(20),
+    PlayerUsername VARCHAR(20),
+    PlayerID VARCHAR(10),
+    ShopName VARCHAR(20),
+    LocationName VARCHAR(20),
     PRIMARY KEY (PlayerUsername, PlayerID, ShopName, LocationName),
     FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn,
     FOREIGN KEY (PlayerUsername, PlayerID) REFERENCES PlayerCharacter
@@ -298,8 +298,8 @@ INSERT INTO BuysFrom VALUES ('Spready', '34521', 'Armure', 'Perion');
 INSERT INTO BuysFrom VALUES ('Faker', '10000', 'PowerSurge', 'Kerning');
 
 CREATE TABLE Location(
-    Name CHAR(20) PRIMARY KEY,
-    Biome CHAR(20)
+    Name VARCHAR(20) PRIMARY KEY,
+    Biome VARCHAR(20)
 );
 
 grant select on Location to public;
@@ -311,9 +311,9 @@ INSERT INTO Location VALUES ('Henney', 'Grassland');
 INSERT INTO Location VALUES ('Perion', 'Desert');
 
 CREATE TABLE Completes(
-    LocationName CHAR(20),
-    PlayerUsername CHAR(20),
-    PlayerID CHAR(10),
+    LocationName VARCHAR(20),
+    PlayerUsername VARCHAR(20),
+    PlayerID VARCHAR(10),
     PRIMARY KEY (LocationName, PlayerUsername, PlayerID),
     FOREIGN KEY (LocationName) REFERENCES Location,
     FOREIGN KEY (PlayerUsername, PlayerID) REFERENCES PlayerCharacter
@@ -331,7 +331,7 @@ INSERT INTO Completes VALUES ('Perion', 'Faker', '10000');
 
 CREATE TABLE MLevelRewardHealth (
     MonsterLevel INTEGER PRIMARY KEY,
-    Reward CHAR(50),
+    Reward VARCHAR(50),
     Health INTEGER
 );
 
@@ -348,12 +348,12 @@ INSERT INTO MLevelRewardHealth VALUES (1, '45800 XP, 9500 Gold, Guaranteed item 
 INSERT INTO MLevelRewardHealth VALUES (1, '50000 XP, 11500 Gold, Guaranteed item drop', 1500000);
 
 CREATE TABLE Monster_isAt (
-    Race CHAR(20),
-    MonsterID CHAR(10),
-    Type CHAR(20),
+    Race VARCHAR(20),
+    MonsterID VARCHAR(10),
+    Type VARCHAR(20),
     MonsterLevel INTEGER,
-    LocationName CHAR(20),
-    PRIMARY KEY (Race, MonsterID),
+    LocationName VARCHAR(20),
+    PRIMARY KEY (MonsterID),
     FOREIGN KEY (LocationName) REFERENCES Location,
     FOREIGN KEY (MonsterLevel) REFERENCES MLevelRewardHealth
 );
@@ -376,29 +376,28 @@ INSERT INTO Monster_isAt VALUES ('Dragon', '6744', 'Ice', 100, 'Kerning');
 
 
 CREATE TABLE Fights(
-    MonsterRace CHAR(20),
-    MonsterID CHAR(10),
-    PlayerUsername CHAR(20),
-    PlayerID CHAR(10),
-    PRIMARY KEY (MonsterRace, MonsterID, PlayerUsername, PlayerID),
+    MonsterID VARCHAR(10),
+    PlayerUsername VARCHAR(20),
+    PlayerID VARCHAR(10),
+    PRIMARY KEY (MonsterID, PlayerUsername, PlayerID),
     FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter,
-    FOREIGN KEY (MonsterRace, MonsterID) REFERENCES Monster_IsAt
+    FOREIGN KEY (MonsterID) REFERENCES Monster_IsAt
 );
 
 grant select on Fights to public;
 
-INSERT INTO Fights VALUES ('Yordle', '3017', 'Spready', '34521');
-INSERT INTO Fights VALUES ('Treeant', '2223', 'KumaClub', '33579');
-INSERT INTO Fights VALUES ('Orc', '1231', 'Doublelift', '1122');
-INSERT INTO Fights VALUES ('Angel', '1155', 'Lilyyyxx', '78');
-INSERT INTO Fights VALUES ('Demon', '2518', 'Faker', '10000');
-INSERT INTO Fights VALUES ('Mermaid', '6687', 'Faker', '10000');
-INSERT INTO Fights VALUES ('Elf', '1353', 'cinnabunz', '4567');
-INSERT INTO Fights VALUES ('Bug', '9521', 'Emiru', '26227');
+INSERT INTO Fights VALUES ('3017', 'Spready', '34521');
+INSERT INTO Fights VALUES ('2223', 'KumaClub', '33579');
+INSERT INTO Fights VALUES ('1231', 'Doublelift', '1122');
+INSERT INTO Fights VALUES ('1155', 'Lilyyyxx', '78');
+INSERT INTO Fights VALUES ('2518', 'Faker', '10000');
+INSERT INTO Fights VALUES ('6687', 'Faker', '10000');
+INSERT INTO Fights VALUES ('1353', 'cinnabunz', '4567');
+INSERT INTO Fights VALUES ('9521', 'Emiru', '26227');
 
 
 CREATE TABLE Event(
-    Name CHAR(20),
+    Name VARCHAR(20),
     StartDate DATE,
     EndDate DATE,
     PRIMARY KEY (Name, EndDate, StartDate)
@@ -413,10 +412,10 @@ INSERT INTO Event VALUES ('Scare Away the Darkness', 2021-01-01, 2021-01-15);
 INSERT INTO Event VALUES ('Hold The Door', 2016-05-22, 2016-05-23);
 
 CREATE TABLE Quest_Contains(
-    Title CHAR(20) PRIMARY KEY,
-    Description CHAR(50),
-    Reward CHAR(50),
-    EventName CHAR(20),
+    Title VARCHAR(20) PRIMARY KEY,
+    Description VARCHAR(50),
+    Reward VARCHAR(50),
+    EventName VARCHAR(20),
     EventEndDate DATE,
     EventStartDate DATE,
     FOREIGN KEY (EventName, EventEndDate, EventStartDate) REFERENCES Event
@@ -438,9 +437,9 @@ INSERT INTO Quest_Contains VALUES ('Duty Comes First', 'Resurrect 5 friends',
 
 
 CREATE TABLE Participates(
-    QuestTitle CHAR(20),
-    PlayerUsername CHAR(20),
-    PlayerID CHAR(10),
+    QuestTitle VARCHAR(20),
+    PlayerUsername VARCHAR(20),
+    PlayerID VARCHAR(10),
     Status SMALLINT,
     PRIMARY KEY (QuestTitle, PlayerUsername, PlayerID),
     FOREIGN KEY (PlayerID, PlayerUsername) REFERENCES PlayerCharacter,
