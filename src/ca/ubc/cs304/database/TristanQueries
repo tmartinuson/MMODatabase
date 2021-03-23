@@ -1,0 +1,97 @@
+DELETE Operation
+Implement a cascade-on-delete situation (or an alternative that was agreed to by the TA
+if the DB system doesn’t provide this).
+Provide an interface for the user to specify some input for the deletion operation.
+
+Warrior deletes their character/Cascades to PlayerCharacter
+
+DELETE FROM Warrior WHERE ID = ?;
+
+ON DELETE CASCADE TABLES
+Completes
+Assassin
+Warrior
+Mage
+
+
+
+
+
+
+Selection
+Create one query of this category and provide an interface for the user to specify the values of the selection
+conditions to be returned.
+Example:
+
+SELECT ...
+FROM ...
+WHERE Field1 = :Var1 AND Field2 > :Var2
+
+Selection of items held sold by the Shop
+
+SELECT ItemID, Price, Stats
+FROM Item_Equips_Sells as i
+WHERE i.ShopName = ? AND i.LocationName = ?
+
+
+
+
+
+Join
+Create one query in this category, which joins at least 2 tables and performs a meaningful query, and
+provide an interface for the user to execute this query. The user must provide at least one
+value to qualify in the WHERE clause (e.g. join the Customer and the Transaction table to find
+the names and phone numbers of all customers who have purchased a specific item).
+
+Join Location and Shop_IsIn to find all shops that are located in a given location
+
+SELECT ShopName, Type
+FROM Shop_IsIn as s, Location as l
+WHERE s.LocationName = l.Name AND s.LocationName = ? AND l.Name = ?
+
+
+
+
+
+
+
+Aggregation with Having
+Create one meaningful query that requires
+the use of a HAVING clause, and provide an interface
+(e.g., HTML 1 button/dropdown, etc.) for the user to execute this query.
+
+Group Monster_isAt by location where each monster is having > 60 MonsterLevel (High Level)
+
+SELECT Race, Type, MonsterLevel, LocationName
+FROM Monster_isAt
+GROUP BY LocationName
+HAVING MonsterLevel > 60
+
+
+
+
+
+
+
+Division
+Create one query of this category and provide an interface (i.e.,
+HTML button, etc.) for the user to execute this query (e.g., find all the 1 customers who bought all the items).
+
+Which players has completed all locations
+
+SELECT c.PlayerID
+FROM Completes as c
+WHERE NOT EXISTS (
+SELECT *
+FROM Completes as c1
+WHERE NOT EXISTS (
+SELECT *
+FROM Completes as c2
+WHERE (c1.LocationName = c2.LocationName) AND (c1.PlayerID = c2.PlayerID)))
+
+
+deleteGivenWarrior(String playerID)
+viewItemsInStockAtStore(String shopName, String location)
+storesInLocation(String location)
+strongMonstersByLocation()
+completedAllLocations()

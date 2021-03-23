@@ -3,9 +3,7 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
-import ca.ubc.cs304.model.LocationAndPrice;
-import ca.ubc.cs304.model.LocationRace;
-import ca.ubc.cs304.model.SimplifiedItemModel;
+import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.ui.LoginWindow;
 import ca.ubc.cs304.ui.TerminalTransactions;
 
@@ -99,6 +97,26 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
 		ArrayList<SimplifiedItemModel> results = dbHandler.projectFromItems();
 	}
 
+	public void deleteGivenWarrior(String playerID) {
+        dbHandler.deleteGivenWarrior(playerID);
+    }
+
+    public void viewItemsInStockAtStore(String shopName, String location) {
+        ArrayList<Items> results = dbHandler.viewItemsInStockAtStore(shopName,location);
+    }
+
+    public void storesInLocation(String location) {
+        ArrayList<Store> results = dbHandler.storesInLocation(location);
+    }
+
+    public void strongMonstersByLocation() {
+        ArrayList<Monster> results = dbHandler.strongMonstersByLocation();
+    }
+
+    public void completedAllLocations() {
+        ArrayList<Player> results = dbHandler.completedAllLocations();
+    }
+
 	/**
 	 * TerminalTransactionsDelegate Implementation
 	 * 
@@ -119,7 +137,7 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
      * called branch and creating a new one for this project to use
      */ 
 	public void databaseSetup() {
-		dbHandler.databaseSetup();;
+		dbHandler.databaseSetup();
 		
 	}
     

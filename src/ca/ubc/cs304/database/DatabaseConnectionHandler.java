@@ -8,9 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import ca.ubc.cs304.model.LocationAndPrice;
-import ca.ubc.cs304.model.LocationRace;
-import ca.ubc.cs304.model.SimplifiedItemModel;
+import ca.ubc.cs304.model.*;
 
 /**
  * This class handles all database related transactions
@@ -71,6 +69,132 @@ public class DatabaseConnectionHandler {
 
 		return result;
 	}
+
+    public void deleteGivenWarrior(String playerID) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("DELETE FROM Warrior WHERE ID = " + playerID);
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public ArrayList<Items> viewItemsInStockAtStore(String shopName, String location) {
+        ArrayList<Items> result = new ArrayList<Items>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT ItemID, Price, Stats FROM Item_Equips_Sells as i " +
+                    "WHERE i.ShopName = " + shopName + " AND i.LocationName = " + location);
+
+            while(rs.next()) {
+                Items model = new Items(
+                        rs.getString("ItemID"),
+                        rs.getInt("Price"),
+                        rs.getString("Stats"));
+                result.add(model);
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+
+        return result;
+    }
+
+    public ArrayList<Store> storesInLocation(String location) {
+        ArrayList<Store> result = new ArrayList<Store>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT ShopName, Type FROM Shop_IsIn as s, Location as l " +
+                    "WHERE s.LocationName = l.Name AND s.LocationName = " + location + " AND l.Name = " + location);
+
+            while(rs.next()) {
+                Store model = new Store(
+                        rs.getString("ShopName"),
+                        rs.getString("Type"));
+                result.add(model);
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+
+        return result;
+    }
+
+
+    public ArrayList<Monster> strongMonstersByLocation() {
+        ArrayList<Monster> result = new ArrayList<Monster>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT Race, Type, MonsterLevel, LocationName" +
+                                                " FROM Monster_isAt" +
+                                                " GROUP BY LocationName" +
+                                                " HAVING MonsterLevel > 60");
+
+            while(rs.next()) {
+                Monster model = new Monster(
+                        rs.getString("Race"),
+                        rs.getString("Type"),
+                        rs.getInt("MonsterLevel"),
+                        rs.getString("LocationName"));
+                result.add(model);
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+
+        return result;
+    }
+
+    public ArrayList<Player> completedAllLocations() {
+	    //This one needs to be fixed for division
+        //Scope is to find all players that have completed all locations
+        //May need to join for username
+        ArrayList<Player> result = new ArrayList<Player>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT c.PlayerID, c.PlayerUsername" +
+                                                " FROM Completes as c" +
+                                                " WHERE NOT EXISTS (" +
+                                                " SELECT *" +
+                                                " FROM Completes as c1" +
+                                                " WHERE NOT EXISTS (" +
+                                                " SELECT *" +
+                                                " FROM Completes as c2" +
+                                                " WHERE (c1.LocationName = c2.LocationName) AND (c1.PlayerID = c2.PlayerID)))");
+
+            while(rs.next()) {
+                Player model = new Player(
+                        rs.getString("PlayerID"),
+                        rs.getString("PlayerUsername"));
+                result.add(model);
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+
+        return result;
+    }
+
 
 	public ArrayList<LocationRace> countRaceByLocation() {
 		ArrayList<LocationRace> result = new ArrayList<LocationRace>();
