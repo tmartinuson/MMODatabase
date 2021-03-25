@@ -2,10 +2,12 @@ package ca.ubc.cs304.model;
 
 public class Player {
     private final String playerID, playerUsername;
+    private final Integer playerLevel;
 
-    public Player(String playerID, String playerUsername) {
+    public Player(String playerID, String playerUsername, Integer playerLevel) {
         this.playerID = playerID;
         this.playerUsername = playerUsername;
+        this.playerLevel = playerLevel;
     }
 
     public String getPlayerID() {
@@ -14,5 +16,9 @@ public class Player {
 
     public String getPlayerUsername() {
         return playerUsername;
+    }
+
+    public Integer getPlayerLevel() {
+        return playerLevel;
     }
 }
