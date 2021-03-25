@@ -1,25 +1,25 @@
+DROP TABLE Participates;
+DROP TABLE Quest_Contains;
+DROP TABLE Fights;
+DROP TABLE Monster_isAt;
+DROP TABLE MLevelRewardHealth;
+DROP TABLE Completes;
 
-drop table PlayerXPLevel;
-drop table PlayerCharacter;
-drop table Assassin;
-drop table Warrior;
-drop table Mage;
-drop table GamesWith;
-drop table Converses;
-drop table NPCQuestXP;
-drop table NonPlayerCharacter_Gives;
-drop table Item_Equips_Sells;
-drop table Rewards;
-drop table Shop_IsIn;
-drop table BuysFrom;
-drop table Locations;
-drop table Completes;
-drop table MLevelRewardHealth;
-drop table Monster_isAt;
-drop table Fights;
-drop table Events;
-drop table Quest_Contains;
-drop table Participates;
+DROP TABLE BuysFrom;
+DROP TABLE Converses;
+DROP TABLE NonPlayerCharacter_Gives;
+DROP TABLE Rewards;
+DROP TABLE Events;
+DROP TABLE Item_Equips_Sells;
+DROP TABLE NPCQuestXP;
+DROP TABLE Shop_IsIn;
+DROP TABLE Locations;
+DROP TABLE GamesWith;
+DROP TABLE Mage;
+DROP TABLE Warrior;
+DROP TABLE Assassin;
+DROP TABLE PlayerCharacter;
+DROP TABLE PlayerXPLevel;
 
 CREATE TABLE PlayerXPLevel(
                               PlayerLevel INTEGER DEFAULT 1,
@@ -80,21 +80,6 @@ CREATE TABLE GamesWith(
 
 grant select on GamesWith to public;
 
-
-
-CREATE TABLE Converses(
-                          PlayerID VARCHAR(10),
-                          converseDate DATE,
-                          NPCName VARCHAR(20),
-                          PRIMARY KEY (PlayerID, NPCName),
-                          FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
-                          FOREIGN KEY (NPCName) REFERENCES NonPlayerCharacter_Gives
-);
-
-grant select on Converses to public;
-
-
-
 CREATE TABLE NPCQuestXP(
                            Miniquest VARCHAR(70) PRIMARY KEY,
                            RewardXP INTEGER
@@ -102,19 +87,23 @@ CREATE TABLE NPCQuestXP(
 
 grant select on NPCQuestXP to public;
 
-
-
-CREATE TABLE NonPlayerCharacter_Gives(
-                                         NPCName VARCHAR(20) PRIMARY KEY,
-                                         Miniquest VARCHAR(70),
-                                         ItemID VARCHAR(10),
-                                         FOREIGN KEY (ItemID) REFERENCES Item_Equips_Sells,
-                                         FOREIGN KEY (Miniquest) REFERENCES NPCQuestXP
+CREATE TABLE Locations(
+                          LocationName VARCHAR(20) PRIMARY KEY,
+                          Biome VARCHAR(20)
 );
 
-grant select on NonPlayerCharacter_Gives to public;
+grant select on Locations to public;
 
+CREATE TABLE Shop_IsIn(
+                          ShopName VARCHAR(20),
+                          LocationName VARCHAR(20),
+                          ShopType VARCHAR(20),
+                          InventoryAmount INTEGER,
+                          PRIMARY KEY (ShopName, LocationName),
+                          FOREIGN KEY (LocationName) REFERENCES Locations
+);
 
+grant select on Shop_IsIn to public;
 
 CREATE TABLE Item_Equips_Sells(
                                   Price INTEGER,
@@ -130,6 +119,35 @@ CREATE TABLE Item_Equips_Sells(
 
 grant select on Item_Equips_Sells to public;
 
+CREATE TABLE NonPlayerCharacter_Gives(
+                                         NPCName VARCHAR(20) PRIMARY KEY,
+                                         Miniquest VARCHAR(70),
+                                         ItemID VARCHAR(10),
+                                         FOREIGN KEY (ItemID) REFERENCES Item_Equips_Sells,
+                                         FOREIGN KEY (Miniquest) REFERENCES NPCQuestXP
+);
+
+grant select on NonPlayerCharacter_Gives to public;
+
+CREATE TABLE Converses(
+                          PlayerID VARCHAR(10),
+                          converseDate DATE,
+                          NPCName VARCHAR(20),
+                          PRIMARY KEY (PlayerID, NPCName),
+                          FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
+                          FOREIGN KEY (NPCName) REFERENCES NonPlayerCharacter_Gives
+);
+
+grant select on Converses to public;
+
+CREATE TABLE Events(
+                       EventName VARCHAR(30),
+                       StartDate DATE,
+                       EndDate DATE,
+                       PRIMARY KEY (EventName, StartDate, EndDate)
+);
+
+grant select on Events to public;
 
 
 CREATE TABLE Rewards(
@@ -145,20 +163,6 @@ CREATE TABLE Rewards(
 grant select on Rewards to public;
 
 
-
-CREATE TABLE Shop_IsIn(
-                          LocationName VARCHAR(20),
-                          ShopName VARCHAR(20),
-                          ShopType VARCHAR(20),
-                          InventoryAmount INTEGER,
-                          PRIMARY KEY (LocationName, ShopName),
-                          FOREIGN KEY (LocationName) REFERENCES Locations
-);
-
-grant select on Shop_IsIn to public;
-
-
-
 CREATE TABLE BuysFrom(
                          PlayerID VARCHAR(10),
                          ShopName VARCHAR(20),
@@ -169,14 +173,6 @@ CREATE TABLE BuysFrom(
 );
 
 grant select on BuysFrom to public;
-
-CREATE TABLE Locations(
-                          LocationName VARCHAR(20) PRIMARY KEY,
-                          Biome VARCHAR(20)
-);
-
-grant select on Locations to public;
-
 
 
 CREATE TABLE Completes(
@@ -189,8 +185,6 @@ CREATE TABLE Completes(
 );
 
 grant select on Completes to public;
-
-
 
 CREATE TABLE MLevelRewardHealth (
                                     MonsterLevel INTEGER PRIMARY KEY,
@@ -223,23 +217,14 @@ CREATE TABLE Fights(
 
 grant select on Fights to public;
 
-CREATE TABLE Events(
-                       EventName VARCHAR(30),
-                       StartDate DATE,
-                       EndDate DATE,
-                       PRIMARY KEY (EventName, EndDate, StartDate)
-);
-
-grant select on Events to public;
-
 CREATE TABLE Quest_Contains(
                                Title VARCHAR(30) PRIMARY KEY,
                                QuestDescription VARCHAR(50),
                                Reward VARCHAR(50),
                                EventName VARCHAR(30),
-                               EventEndDate DATE,
                                EventStartDate DATE,
-                               FOREIGN KEY (EventName, EventEndDate, EventStartDate) REFERENCES Events
+                               EventEndDate DATE,
+                               FOREIGN KEY (EventName, EventStartDate, EventEndDate) REFERENCES Events
 );
 
 grant select on Quest_Contains to public;
@@ -255,17 +240,6 @@ CREATE TABLE Participates(
 
 grant select on Participates to public;
 
-INSERT INTO Participates VALUES ('Cast all the Spells', '8644', 0);
-INSERT INTO Participates VALUES ('Best Potions', '8644', 0);
-INSERT INTO Participates VALUES ('So Much Power', '1098', 1);
-INSERT INTO Participates VALUES ('Good Vision', '863', 1);
-INSERT INTO Participates VALUES ('Duty Comes First', '20958', 0);
-INSERT INTO Participates VALUES ('Cast all the Spells', '15624', 1);
-INSERT INTO Participates VALUES ('Best Potions', '34521', 0);
-INSERT INTO Participates VALUES ('So Much Power','10000', 1);
-INSERT INTO Participates VALUES ('Good Vision','33579', 1);
-INSERT INTO Participates VALUES ('Duty Comes First', '1122', 0);
-
 INSERT INTO PlayerXPLevel VALUES (1, 996);
 INSERT INTO PlayerXPLevel VALUES (18, 165098);
 INSERT INTO PlayerXPLevel VALUES (18, 178239);
@@ -280,7 +254,6 @@ INSERT INTO PlayerXPLevel VALUES (12, 66543);
 INSERT INTO PlayerXPLevel VALUES (8, 28709);
 INSERT INTO PlayerXPLevel VALUES (39, 17829232);
 INSERT INTO PlayerXPLevel VALUES (46, 37452201);
-INSERT INTO PlayerXPLevel VALUES (50, 50000000);
 INSERT INTO PlayerXPLevel VALUES (1, 0);
 INSERT INTO PlayerXPLevel VALUES (1, 244);
 INSERT INTO PlayerXPLevel VALUES (1, 65);
@@ -312,13 +285,6 @@ INSERT INTO Assassin VALUES ('1122', 180);
 INSERT INTO Assassin VALUES ('33579', 270);
 INSERT INTO Assassin VALUES ('863', 300);
 
-INSERT INTO Mage VALUES ('12144', NULL);
-INSERT INTO Mage VALUES ('20958', 'Flash Frost');
-INSERT INTO Mage VALUES ('8644', 'Deception Orb');
-INSERT INTO Mage VALUES ('78', 'Bouncing Blade');
-INSERT INTO Mage VALUES ('1098', 'Light Binding');
-INSERT INTO Mage VALUES ('15624', 'Pyroblast');
-
 INSERT INTO Warrior VALUES ('887', 0);
 INSERT INTO Warrior VALUES ('4567', 360);
 INSERT INTO Warrior VALUES ('26227', 450);
@@ -326,12 +292,65 @@ INSERT INTO Warrior VALUES ('10000', 500);
 INSERT INTO Warrior VALUES ('27493', 340);
 INSERT INTO Warrior VALUES ('432', 440);
 
+INSERT INTO Mage VALUES ('12144', NULL);
+INSERT INTO Mage VALUES ('20958', 'Flash Frost');
+INSERT INTO Mage VALUES ('8644', 'Deception Orb');
+INSERT INTO Mage VALUES ('78', 'Bouncing Blade');
+INSERT INTO Mage VALUES ('1098', 'Light Binding');
+INSERT INTO Mage VALUES ('15624', 'Pyroblast');
+
 INSERT INTO GamesWith VALUES ('20958', 'YTCrew', '15624');
 INSERT INTO GamesWith VALUES ('8644', 'MusicTime', '432');
 INSERT INTO GamesWith VALUES ('78', 'MapleMaple', '432567');
 INSERT INTO GamesWith VALUES ('1098', 'Freelo', '26227');
 INSERT INTO GamesWith VALUES ('34521', 'Buds', '15624');
 INSERT INTO GamesWith VALUES ('432', 'PCMR', '4567');
+
+INSERT INTO NPCQuestXP VALUES ('Travel 5,000 km', 1000);
+INSERT INTO NPCQuestXP VALUES ('Buy a weapon from any weapon store', 300);
+INSERT INTO NPCQuestXP VALUES ('Catch a salmon from any stream', 500);
+INSERT INTO NPCQuestXP VALUES ('Fight 10 Level 20 monsters', 3000);
+INSERT INTO NPCQuestXP VALUES ('Create a party with two buddies', 5000);
+INSERT INTO NPCQuestXP VALUES ('Complete any boss raid with a buddy', 5000);
+INSERT INTO NPCQuestXP VALUES ('Gather 3000 wood', 750);
+INSERT INTO NPCQuestXP VALUES ('Craft gold armor', 1000);
+
+INSERT INTO Locations VALUES ('Ludi', 'Temperate forest');
+INSERT INTO Locations VALUES ('Kerning', 'Taiga');
+INSERT INTO Locations VALUES ('Ellinia', 'Swamp');
+INSERT INTO Locations VALUES ('Henney', 'Grassland');
+INSERT INTO Locations VALUES ('Perion', 'Desert');
+
+INSERT INTO Shop_IsIn VALUES ('PotionZ', 'Ludi', 'Potion', 20);
+INSERT INTO Shop_IsIn VALUES ('PowerSurge', 'Kerning', 'Weapon', 50);
+INSERT INTO Shop_IsIn VALUES ('Magix', 'Ellinia', 'Magic', 120);
+INSERT INTO Shop_IsIn VALUES ('ShieldsUp', 'Henney', 'Armor', 50);
+INSERT INTO Shop_IsIn VALUES ('Chargers', 'Kerning', 'Armor', 100);
+INSERT INTO Shop_IsIn VALUES ('Unlost', 'Kerning', 'Potion', 30);
+INSERT INTO Shop_IsIn VALUES ('Armure', 'Perion', 'Armor', 100);
+INSERT INTO Shop_IsIn VALUES ('SpellingsBees', 'Ellinia', 'Magic', 50);
+
+INSERT INTO Item_Equips_Sells VALUES (5, '17894', '+10 Health from potion', 'PotionZ', 'Ludi', '34521');
+INSERT INTO Item_Equips_Sells VALUES (200, '18849', '+2 Attack', 'PowerSurge', 'Kerning', '33579');
+INSERT INTO Item_Equips_Sells VALUES (500, '98392', '+3 Effectiveness on Primary Spell', 'SpellingsBees', 'Ellinia', '1122');
+INSERT INTO Item_Equips_Sells VALUES (800, '1984', '+3000 Health from potion', 'PotionZ', 'Ludi', '78');
+INSERT INTO Item_Equips_Sells VALUES (200, '324', '+2 Defense', 'ShieldsUp', 'Henney', '10000');
+INSERT INTO Item_Equips_Sells VALUES (432, '564', '+200 health', 'PotionZ', 'Ludi', '1122');
+INSERT INTO Item_Equips_Sells VALUES (206900, '193', '+20 Attack', 'Chargers', 'Kerning', '10000');
+INSERT INTO Item_Equips_Sells VALUES (345, '532', '+1 Attack', 'Chargers', 'Kerning', '4567');
+INSERT INTO Item_Equips_Sells VALUES (25662, '314', '+7 Defense', 'ShieldsUp', 'Henney','26227');
+INSERT INTO Item_Equips_Sells VALUES (2377, '211', '+3 Attack', 'Unlost', 'Kerning','863');
+INSERT INTO Item_Equips_Sells VALUES (4000, '15699', '+20 Illumination for Dark Locations', 'Unlost', 'Kerning', '4567');
+INSERT INTO Item_Equips_Sells VALUES (186362, '5332', '+15 Defense', 'Armure', 'Perion', '26227');
+
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Marzia', 'Travel 5,000 km', '17894');
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Eren', 'Buy a weapon from any weapon store', '18849');
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Nami', 'Catch a salmon from any stream', '98392');
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Chika', 'Fight 10 Level 20 monsters', '1984');
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Erwin', 'Create a party with two buddies', '324');
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Viego', 'Complete any boss raid with a buddy', '193');
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Braum', 'Gather 3000 wood', '15699');
+INSERT INTO NonPlayerCharacter_Gives VALUES ('Ornn', 'Craft gold armor', '5332');
 
 INSERT INTO Converses VALUES ('34521', TO_DATE('2020/12/24', 'yyyy/mm/dd'), 'Marzia');
 INSERT INTO Converses VALUES ('33579', TO_DATE('2010/06/22', 'yyyy/mm/dd'), 'Eren');
@@ -342,50 +361,17 @@ INSERT INTO Converses VALUES ('10000', TO_DATE('2019/09/07', 'yyyy/mm/dd'), 'Vie
 INSERT INTO Converses VALUES ('4567', TO_DATE('2015/10/18', 'yyyy/mm/dd'), 'Braum');
 INSERT INTO Converses VALUES ('26227', TO_DATE('2020/07/29', 'yyyy/mm/dd'), 'Ornn');
 
-INSERT INTO NPCQuestXP VALUES ('Travel 5,000 km', 1000);
-INSERT INTO NPCQuestXP VALUES ('Buy a weapon from any weapon store', 300);
-INSERT INTO NPCQuestXP VALUES ('Catch a salmon from any stream', 500);
-INSERT INTO NPCQuestXP VALUES ('Fight 10 Level 20 monsters', 3000);
-INSERT INTO NPCQuestXP VALUES ('Create a party with two buddies', 5000);
-INSERT INTO NPCQuestXP VALUES ('Complete any boss raid with a buddy', 5000);
-
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Marzia', 'Travel 5,000 km', '17894');
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Eren', 'Buy a weapon from any weapon store', '18849');
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Nami', 'Catch a salmon from any stream', '98392');
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Chika', 'Fight 10 Level 20 monsters', '1984');
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Erwin', 'Create a party with two buddies', '324');
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Viego', 'Complete any boss raid with a buddy', '193');
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Braum', 'Gather 3000 wood ', '15699');
-INSERT INTO NonPlayerCharacter_Gives VALUES ('Ornn', 'Craft gold armor', '5332');
-
-INSERT INTO Item_Equips_Sells VALUES (5, '17894', '+10 Health from potion', 'PotionZ', 'Ludi', '34521');
-INSERT INTO Item_Equips_Sells VALUES (200, '18849', '+2 Attack', 'PowerSurge', 'Kerning', '33579');
-INSERT INTO Item_Equips_Sells VALUES (500, '98392', '+3 Effectiveness on Primary Spell', 'Ellinia ',
-                                      'Doublelift', '1122');
-INSERT INTO Item_Equips_Sells VALUES (800, '1984', '+3000 Health from potion', 'PotionZ', 'Ludi', '78');
-INSERT INTO Item_Equips_Sells VALUES (200, '324', '+2 Defense', 'ShieldsUp', 'Henney', '10000');
-INSERT INTO Item_Equips_Sells VALUES (432, '564', '+200 health', 'PotionZ', 'Ludi', 'NULL');
-INSERT INTO Item_Equips_Sells VALUES (206900, '193', '+20 Attack', 'Chargers', 'Kerning', '10000');
-INSERT INTO Item_Equips_Sells VALUES (345, '532', '+1 Attack', 'Chargers', 'Kerning', '4567');
-INSERT INTO Item_Equips_Sells VALUES (25662, '314', '+7 Defense', 'ShieldsUp', 'Henney','26227');
-INSERT INTO Item_Equips_Sells VALUES (2377, '211', '+3 Attack', 'Unlost', 'Kerning','NULL');
-INSERT INTO Item_Equips_Sells VALUES (4000, '15699', '+20 Illumination for Dark Locations', 'Unlost', 'Kerning', '4567');
-INSERT INTO Item_Equips_Sells VALUES (186362, '5332', '+15 Defense', 'Armure', 'Perion', '26227');
+INSERT INTO Events VALUES ('Magicians’ Arena', TO_DATE('2019/10/03', 'yyyy/mm/dd'), TO_DATE('2019/10/13', 'yyyy/mm/dd'));
+INSERT INTO Events VALUES ('Every Potion We’ve Got', TO_DATE('2014/06/25', 'yyyy/mm/dd'), TO_DATE('2014/06/28', 'yyyy/mm/dd'));
+INSERT INTO Events VALUES ('Assassin Power Surge', TO_DATE('2020/09/10', 'yyyy/mm/dd'), TO_DATE('2020/10/10', 'yyyy/mm/dd'));
+INSERT INTO Events VALUES ('Scare Away the Darkness', TO_DATE('2021/01/01', 'yyyy/mm/dd'), TO_DATE('2021/01/15', 'yyyy/mm/dd'));
+INSERT INTO Events VALUES ('Hold The Door', TO_DATE('2016/05/22', 'yyyy/mm/dd'), TO_DATE('2016/05/23', 'yyyy/mm/dd'));
 
 INSERT INTO Rewards VALUES ('98392', 'Magicians’ Arena', TO_DATE('2019/10/03', 'yyyy/mm/dd'), TO_DATE('2019/10/13', 'yyyy/mm/dd'));
 INSERT INTO Rewards VALUES ('1984', 'Every Potion We’ve Got', TO_DATE('2014/06/25', 'yyyy/mm/dd'), TO_DATE('2014/06/28', 'yyyy/mm/dd'));
 INSERT INTO Rewards VALUES ('193', 'Assassin Power Surge', TO_DATE('2020/09/10', 'yyyy/mm/dd'), TO_DATE('2020/10/10', 'yyyy/mm/dd'));
 INSERT INTO Rewards VALUES ('15699', 'Scare Away the Darkness', TO_DATE('2021/01/01', 'yyyy/mm/dd'), TO_DATE('2021/01/15', 'yyyy/mm/dd'));
 INSERT INTO Rewards VALUES ('5332', 'Hold The Door', TO_DATE('2016/05/22', 'yyyy/mm/dd'), TO_DATE('2016/05/23', 'yyyy/mm/dd'));
-
-INSERT INTO Shop_IsIn VALUES ('PotionZ', 'Ludi', 'Potion', 20);
-INSERT INTO Shop_IsIn VALUES ('PowerSurge', 'Kerning', 'Weapon', 50);
-INSERT INTO Shop_IsIn VALUES ('Magix', 'Ellinia', 'Magic', 120);
-INSERT INTO Shop_IsIn VALUES ('ShieldsUp', 'Henney', 'Armor', 50);
-INSERT INTO Shop_IsIn VALUES ('Chargers', 'Kerning', 'Armor', 100);
-INSERT INTO Shop_IsIn VALUES ('Unlost', 'Kerning', 'Potion', 30);
-INSERT INTO Shop_IsIn VALUES ('Armure', 'Perion', 'Armor', 100);
-INSERT INTO Shop_IsIn VALUES ('SpellingsBees', 'Ellinia', 'Magic', 50);
 
 INSERT INTO BuysFrom VALUES ('8644', 'Chargers', 'Kerning');
 INSERT INTO BuysFrom VALUES ('8644', 'Magix', 'Ellinia');
@@ -402,26 +388,34 @@ INSERT INTO BuysFrom VALUES ('10000', 'PowerSurge', 'Kerning');
 
 INSERT INTO Completes VALUES ('Ludi', '1098');
 INSERT INTO Completes VALUES ('Kerning', '863');
-INSERT INTO Completes VALUES ('Ellinia ', '20958');
+INSERT INTO Completes VALUES ('Ellinia', '20958');
 INSERT INTO Completes VALUES ('Henney', '15624');
 INSERT INTO Completes VALUES ('Perion', '34521');
 INSERT INTO Completes VALUES ('Perion', '10000');
 
-INSERT INTO Locations VALUES ('Ludi', 'Temperate forest');
-INSERT INTO Locations VALUES ('Kerning', 'Taiga');
-INSERT INTO Locations VALUES ('Ellinia ', 'Swamp');
-INSERT INTO Locations VALUES ('Henney', 'Grassland');
-INSERT INTO Locations VALUES ('Perion', 'Desert');
-
 INSERT INTO MLevelRewardHealth VALUES (1, '5 XP, 5 Gold', 10);
-INSERT INTO MLevelRewardHealth VALUES (1, '15 XP, 15 Gold, Potion drop', 85);
-INSERT INTO MLevelRewardHealth VALUES (1, '125 XP, 50 Gold, Occasional item drop', 220);
-INSERT INTO MLevelRewardHealth VALUES (1, '450 XP, 150 Gold, Occasional item drop', 70000);
-INSERT INTO MLevelRewardHealth VALUES (1, '3250 XP, 1060 Gold, Occasional item drop', 500550);
-INSERT INTO MLevelRewardHealth VALUES (1, '6750 XP, 2200 Gold, Occasional item drop', 700950);
-INSERT INTO MLevelRewardHealth VALUES (1, '20550 XP, 4300 Gold, Occasional item drop', 900000);
-INSERT INTO MLevelRewardHealth VALUES (1, '45800 XP, 9500 Gold, Guaranteed item drop', 1100500);
-INSERT INTO MLevelRewardHealth VALUES (1, '50000 XP, 11500 Gold, Guaranteed item drop', 1500000);
+INSERT INTO MLevelRewardHealth VALUES (5, '15 XP, 15 Gold, Potion drop', 85);
+INSERT INTO MLevelRewardHealth VALUES (10, '125 XP, 50 Gold, Occasional item drop', 220);
+INSERT INTO MLevelRewardHealth VALUES (35, '450 XP, 150 Gold, Occasional item drop', 70000);
+INSERT INTO MLevelRewardHealth VALUES (50, '3250 XP, 1060 Gold, Occasional item drop', 500550);
+INSERT INTO MLevelRewardHealth VALUES (66, '6750 XP, 2200 Gold, Occasional item drop', 700950);
+INSERT INTO MLevelRewardHealth VALUES (83, '20550 XP, 4300 Gold, Occasional item drop', 900000);
+INSERT INTO MLevelRewardHealth VALUES (95, '45800 XP, 9500 Gold, Guaranteed item drop', 1100500);
+INSERT INTO MLevelRewardHealth VALUES (100, '50000 XP, 11500 Gold, Guaranteed item drop', 1500000);
+
+INSERT INTO Monster_isAt VALUES ('Yordle', '3017', 'Normal', 1, 'Henney');
+INSERT INTO Monster_isAt VALUES ('Treeant', '2223', 'Wind', 5, 'Henney');
+INSERT INTO Monster_isAt VALUES ('Orc', '1231', 'Earth', 10, 'Perion');
+INSERT INTO Monster_isAt VALUES ('Angel', '1155', 'Ice', 35, 'Kerning');
+INSERT INTO Monster_isAt VALUES ('Demon', '2518', 'Fire', 50, 'Perion');
+INSERT INTO Monster_isAt VALUES ('Mermaid', '6687', 'Water', 66, 'Ellinia');
+INSERT INTO Monster_isAt VALUES ('Elf', '1353', 'Electric', 83, 'Perion');
+INSERT INTO Monster_isAt VALUES ('Bug', '9521', 'Poison', 95, 'Ellinia');
+INSERT INTO Monster_isAt VALUES ('Dragon', '1562', 'Psychic', 100, 'Kerning');
+INSERT INTO Monster_isAt VALUES ('Mermaid', '1345', 'Ice', 66, 'Ellinia');
+INSERT INTO Monster_isAt VALUES ('Elf', '7754', 'Fire', 83, 'Perion');
+INSERT INTO Monster_isAt VALUES ('Bug', '8319', 'Wind', 95, 'Ellinia');
+INSERT INTO Monster_isAt VALUES ('Dragon', '6744', 'Ice', 100, 'Kerning');
 
 INSERT INTO Fights VALUES ('3017', '34521');
 INSERT INTO Fights VALUES ('2223', '33579');
@@ -432,19 +426,6 @@ INSERT INTO Fights VALUES ('6687', '10000');
 INSERT INTO Fights VALUES ('1353', '4567');
 INSERT INTO Fights VALUES ('9521', '26227');
 
-INSERT INTO Monster_isAt VALUES ('Yordle', '3017', 'Normal', 1, 'Henney');
-INSERT INTO Monster_isAt VALUES ('Treeant', '2223', 'Wind', 5, 'Henney');
-INSERT INTO Monster_isAt VALUES ('Orc', '1231', 'Earth', 10, 'Perion ');
-INSERT INTO Monster_isAt VALUES ('Angel', '1155', 'Ice', 35, 'Kerning');
-INSERT INTO Monster_isAt VALUES ('Demon', '2518', 'Fire', 50, 'Perion');
-INSERT INTO Monster_isAt VALUES ('Mermaid', '6687', 'Water', 66, 'Ellinia');
-INSERT INTO Monster_isAt VALUES ('Elf', '1353', 'Electric', 83, 'Perion ');
-INSERT INTO Monster_isAt VALUES ('Bug', '9521', 'Poison', 95, 'Ellinia');
-INSERT INTO Monster_isAt VALUES ('Dragon', '1562', 'Psychic', 100, 'Kerning');
-INSERT INTO Monster_isAt VALUES ('Mermaid', '1345', 'Ice', 66, 'Ellinia');
-INSERT INTO Monster_isAt VALUES ('Elf', '7754', 'Fire', 83, 'Perion ');
-INSERT INTO Monster_isAt VALUES ('Bug', '8319', 'Wind', 95, 'Ellinia');
-INSERT INTO Monster_isAt VALUES ('Dragon', '6744', 'Ice', 100, 'Kerning');
 
 INSERT INTO Quest_Contains VALUES ('Cast all the Spells', 'Cast 20 unique spells in a party raid',
                                    'An Ice or Fire spell scroll', 'Magicians’ Arena', TO_DATE('2019/10/03', 'yyyy/mm/dd'), TO_DATE('2019/10/13', 'yyyy/mm/dd'));
@@ -458,8 +439,13 @@ INSERT INTO Quest_Contains VALUES ('Good Vision', 'Fight 50 monsters under a cam
 INSERT INTO Quest_Contains VALUES ('Duty Comes First', 'Resurrect 5 friends',
                                    'Badge of Honour Icon', 'Hold The Door', TO_DATE('2016/05/22', 'yyyy/mm/dd'), TO_DATE('2016/05/23', 'yyyy/mm/dd'));
 
-INSERT INTO Events VALUES ('Magicians’ Arena', TO_DATE('2019/10/03', 'yyyy/mm/dd'), TO_DATE('2019/10/13', 'yyyy/mm/dd'));
-INSERT INTO Events VALUES ('Every Potion We’ve Got', TO_DATE('2014/06/25', 'yyyy/mm/dd'), TO_DATE('2014/06/28', 'yyyy/mm/dd'));
-INSERT INTO Events VALUES ('Assassin Power Surge', TO_DATE('2020/09/10', 'yyyy/mm/dd'), TO_DATE('2020/10/10', 'yyyy/mm/dd'));
-INSERT INTO Events VALUES ('Scare Away the Darkness', TO_DATE('2021/01/01', 'yyyy/mm/dd'), TO_DATE('2021/01/15', 'yyyy/mm/dd'));
-INSERT INTO Events VALUES ('Hold The Door', TO_DATE('2016/05/22', 'yyyy/mm/dd'), TO_DATE('2016/05/23', 'yyyy/mm/dd'));
+INSERT INTO Participates VALUES ('Cast all the Spells', '8644', 0);
+INSERT INTO Participates VALUES ('Best Potions', '8644', 0);
+INSERT INTO Participates VALUES ('So Much Power', '1098', 1);
+INSERT INTO Participates VALUES ('Good Vision', '863', 1);
+INSERT INTO Participates VALUES ('Duty Comes First', '20958', 0);
+INSERT INTO Participates VALUES ('Cast all the Spells', '15624', 1);
+INSERT INTO Participates VALUES ('Best Potions', '34521', 0);
+INSERT INTO Participates VALUES ('So Much Power','10000', 1);
+INSERT INTO Participates VALUES ('Good Vision','33579', 1);
+INSERT INTO Participates VALUES ('Duty Comes First', '1122', 0);
