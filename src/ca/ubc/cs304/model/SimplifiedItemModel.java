@@ -8,14 +8,12 @@ public class SimplifiedItemModel {
 	private final String stats; //TODO: update after Yukie fixes stats
 	private final String shopName;
 	private final String locationName;
-	private final String playerUserName;
 
-	public SimplifiedItemModel(String id, String stats, String shopName, String locationName, String playerUserName) {
+	public SimplifiedItemModel(String id, String stats, String shopName, String locationName) {
 		this.id = id;
 		this.stats = stats;
 		this.shopName = shopName;
 		this.locationName = locationName;
-		this.playerUserName = playerUserName;
 	}
 
 	public String getId() {
@@ -32,9 +30,5 @@ public class SimplifiedItemModel {
 
 	public String getLocationName() {
 		return locationName;
-	}
-
-	public String getPlayerUserName() {
-		return playerUserName;
 	}
 }
