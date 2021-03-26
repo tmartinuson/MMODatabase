@@ -95,3 +95,48 @@ viewItemsInStockAtStore(String shopName, String location)
 storesInLocation(String location)
 strongMonstersByLocation()
 completedAllLocations()
+
+-----------------------------------REDO OF QUERIES----------------------------------------------
+March 25 2021
+
+DELETE
+Remains as the same query as before
+
+deleteGivenWarrior()
+DELETE FROM Warrior WHERE ID = ?
+
+Selection
+Select UsernamePlayer (Can't select since no longer prim key unless we join), PlayerID, Date and NPCName from Converses where Date is after 2020-01-01
+
+SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > '2020-01-01'
+
+JOIN
+Join PLayerXPLevel and PLayerCharacter tables to find the levels of all players who are under level 25
+
+SELECT p.ID, p.Username, xp.PlayerLevel FROM PlayerXPLevel as xp, PlayerCharacter as p WHERE xp.XP = p.XP AND xp.PlayerLevel < 25
+
+Aggregation with Having
+Count the number of shop's grouped by Location from Shop_IsIn having the inventory amount greater than or equal to 50
+
+SELECT LocationName, COUNT(ShopName) FROM Shop_IsIn GROUP BY LocationName HAVING InventoryAmount => 50
+
+Division
+Find the players (determined by PLayerID) that have bought an item from a store in all locations
+
+SELECT p.PlayerID, p.PlayerUsername
+FROM PlayerCharacter as p
+WHERE NOT EXISTS(
+          SELECT *
+          FROM Location as l
+          WHERE NOT EXISTS(
+                    SELECT *
+                    FROM BuysFrom as b
+                    WHERE p.PlayerID = b.PlayerID AND
+                    l.LocationName = b.LocationName
+
+findPlayerConverses()
+findAllPlayersWithLevelsUnder25()
+countShopsByLocation()
+findPlayersThatBoughtFromAllLocations()
+
+---------------------------------------------------------------------------------------------------

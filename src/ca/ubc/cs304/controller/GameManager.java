@@ -97,22 +97,24 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
         dbHandler.deleteGivenWarrior(playerID);
     }
 
-    public void viewItemsInStockAtStore(String shopName, String location) {
-        ArrayList<Items> results = dbHandler.viewItemsInStockAtStore(shopName,location);
+
+    public void findPlayersConverses() {
+        ArrayList<Conversation> results = dbHandler.findPlayersConverses();
     }
 
-    public void storesInLocation(String location) {
-        ArrayList<Store> results = dbHandler.storesInLocation(location);
+    public void findAllPlayersWithLevelsUnder25() {
+        ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder25();
     }
 
-    public void strongMonstersByLocation() {
-        ArrayList<Monster> results = dbHandler.strongMonstersByLocation();
+    public void countShopsByLocation() {
+        ArrayList<LocationShop> results = dbHandler.countShopsByLocation();
     }
 
     public ArrayList completedAllLocations() {
         ArrayList<Player> results = dbHandler.completedAllLocations();
 		return results;
 	}
+
 
 	/**
 	 * TerminalTransactionsDelegate Implementation
