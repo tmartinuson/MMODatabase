@@ -49,15 +49,14 @@ public class DatabaseConnectionHandler {
 
 		try {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT ItemID, Stats, ShopName, LocationName, PlayerUsername " +
-												"FROM Item_Equip_Sells");
+			ResultSet rs = stmt.executeQuery("SELECT ItemID, Stats, ShopName, LocationName " +
+												"FROM Item_Equips_Sells");
 
 			while(rs.next()) {
 				SimplifiedItemModel model = new SimplifiedItemModel(rs.getString("ItemID"),
 						rs.getString("Stats"),
 						rs.getString("ShopName"),
-						rs.getString("LocationName"),
-						rs.getString("PlayerUsername"));
+						rs.getString("LocationName"));
 				result.add(model);
 			}
 			rs.close();
@@ -73,11 +72,11 @@ public class DatabaseConnectionHandler {
     public void deleteGivenWarrior(String playerID) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Warrior WHERE ID = ?");
-            ps.setString(1,playerID);
+			      ps.setString(1, playerID);
 
-            ps.executeUpdate();
-            connection.commit();
-            ps.close();
+			      ps.executeUpdate();
+			      connection.commit();
+			      ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
@@ -189,7 +188,7 @@ public class DatabaseConnectionHandler {
 
 		try {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT LocationName, Count(Race) FROM Monster_isAt GROUP BY LocationName");
+			ResultSet rs = stmt.executeQuery("SELECT LocationName, Count(DISTINCT Race) FROM Monster_isAt GROUP BY LocationName");
 
 			while(rs.next()) {
 				LocationRace model = new LocationRace(
@@ -211,13 +210,19 @@ public class DatabaseConnectionHandler {
 		ArrayList<LocationAndPrice> result = new ArrayList<LocationAndPrice>();
 
 		try {
+			PreparedStatement ps = connection.prepareStatement(
+					"CREATE VIEW Temp(locationName, shopType, avgPrice) AS " +
+								"SELECT I.locationName, S.shopType, AVG(I.price) AS avgPrice " +
+								"FROM Item_Equips_Sells I, Shop_IsIn S " +
+								"WHERE I.itemID > 10000 AND I.locationName = S.locationName AND S.ShopName = I.ShopName " +
+								"GROUP BY S.shopType, I.locationName");
+			ps.executeUpdate();
+			connection.commit();
+			ps.close();
+
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT locationName, MAX(avgPrice) " +
-												"FROM Item_Equips_Sells I " +
-												"WHERE (SELECT locationName, shopType, AVG(price) AS avgPrice " +
-														"FROM Item_Equips_Sells " +
-														"WHERE itemID > 10000 " +
-														"GROUP BY shopType, locationName)" +
+												"FROM Temp " +
 												"GROUP BY locationName");
 
 			while(rs.next()) {
@@ -253,10 +258,9 @@ public class DatabaseConnectionHandler {
 			connection.commit();
 			ps.close();
 
-			PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Assassin VALUES (?,?,?)");
-			ps2.setString(1, username);
-			ps2.setString(2, id);
-			ps2.setInt(3, attackPower);
+			PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Assassin VALUES (?,?)");
+			ps2.setString(1, id);
+			ps2.setInt(2, attackPower);
 			ps2.executeUpdate();
 			connection.commit();
 			ps2.close();
@@ -269,8 +273,9 @@ public class DatabaseConnectionHandler {
 	public void updateLocationBiome(String locName, String biome) {
 		try {
 		  PreparedStatement ps = connection.prepareStatement("UPDATE Location SET Biome = ? WHERE Name = ?");
-		  ps.setString(1, locName);
-		  ps.setString(2, biome);
+			ps.setString(1, biome);
+		  	ps.setString(2, locName);
+
 		
 		  int rowCount = ps.executeUpdate();
 		  if (rowCount == 0) {
