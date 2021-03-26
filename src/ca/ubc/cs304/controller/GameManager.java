@@ -5,7 +5,7 @@ import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
 import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.ui.LoginWindow;
-import ca.ubc.cs304.ui.TerminalTransactions;
+import ca.ubc.cs304.ui.MainMenuWindow;
 
 import java.util.ArrayList;
 
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class GameManager implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	private DatabaseConnectionHandler dbHandler = null;
 	private LoginWindow loginWindow = null;
+	private MainMenuWindow mainMenuWindow = null;
 
 	public GameManager() {
 		dbHandler = new DatabaseConnectionHandler();
@@ -37,9 +38,14 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
 			// Once connected, remove login window and start text transaction flow
 			loginWindow.dispose();
 
-			TerminalTransactions transaction = new TerminalTransactions();
-			transaction.setupDatabase(this);
-			transaction.showMainMenu(this);
+			// TODO put GUI menu here
+			mainMenuWindow = new MainMenuWindow();
+			mainMenuWindow.showFrame(this);
+
+//			UI Menu
+//			TerminalTransactions transaction = new TerminalTransactions();
+//			transaction.setupDatabase(this);
+//			transaction.showMainMenu(this);
 		} else {
 			loginWindow.handleLoginFailed();
 
@@ -60,41 +66,31 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
 							 int xp, int attackPower) {
     	dbHandler.insertAssassinPlayerCharacter(username, id, money, xp, attackPower);
     }
-
-    /**
-	 * TermainalTransactionsDelegate Implementation
-	 * 
-	 * Delete branch with given branch ID.
-	 */ 
-    public void deleteBranch(int branchId) {
-    	//dbHandler.deleteBranch(branchId);
-    }
     
     /**
 	 * TermainalTransactionsDelegate Implementation
 	 * 
-	 * Update the branch name for a specific ID
+	 * Update the location's biome
 	 */
-
     public void updateLocationBiome(String locName, String biome) {
     	dbHandler.updateLocationBiome(locName, biome);
     }
 
 
-	public void countRaceByLocation() {
-    	//TODO: This is where you can print the results to the gui
+	public ArrayList countRaceByLocation() {
 		ArrayList<LocationRace> results = dbHandler.countRaceByLocation();
+		return results;
 	}
 
 
-	public void nestedPriceQuery() {
-		//TODO: This is where you can print the results to the gui
-		ArrayList<LocationAndPrice> results = dbHandler.nestedPriceQuery();
+	public ArrayList nestedPriceQuery() {
+    	ArrayList<LocationAndPrice> results = dbHandler.nestedPriceQuery();
+		return results;
 	}
 
-	public void projectFromItems() {
-		//TODO: This is where you can print the results to the gui
-		ArrayList<SimplifiedItemModel> results = dbHandler.projectFromItems();
+	public ArrayList projectFromItems() {
+    	ArrayList<SimplifiedItemModel> results = dbHandler.projectFromItems();
+		return results;
 	}
 
 	public void deleteGivenWarrior(String playerID) {
@@ -113,9 +109,10 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
         ArrayList<Monster> results = dbHandler.strongMonstersByLocation();
     }
 
-    public void completedAllLocations() {
+    public ArrayList completedAllLocations() {
         ArrayList<Player> results = dbHandler.completedAllLocations();
-    }
+		return results;
+	}
 
 	/**
 	 * TerminalTransactionsDelegate Implementation
@@ -140,7 +137,14 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
 		dbHandler.databaseSetup();
 		
 	}
-    
+
+	// TODO remove this method
+	@Override
+	public void deleteBranch(int branchId) {
+//		dbHandler.deleteBranch(branchId);
+		System.out.println("deleteBranch");
+	}
+
 	/**
 	 * Main method called at launch time
 	 */
