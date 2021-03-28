@@ -1,10 +1,6 @@
 package ca.ubc.cs304.ui;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -24,8 +20,10 @@ import ca.ubc.cs304.delegates.LoginWindowDelegate;
  * The class is only responsible for displaying and handling the login GUI. 
  */
 public class LoginWindow extends JFrame implements ActionListener {
-	private static final int TEXT_FIELD_WIDTH = 10;
+	public static final int TEXT_FIELD_WIDTH = 10;
 	private static final int MAX_LOGIN_ATTEMPTS = 3;
+	public static final Font LUCIDA_SANS_UNICODE = new Font("Lucida Sans Unicode", Font.PLAIN, 14);
+	public static final Color LIGHT_BLUE = new Color(205, 245, 247);
 
 	// running accumulator for login attempts
 	private int loginAttempts;
@@ -47,6 +45,8 @@ public class LoginWindow extends JFrame implements ActionListener {
 
 		JLabel usernameLabel = new JLabel("Enter username: ");
 		JLabel passwordLabel = new JLabel("Enter password: ");
+		usernameLabel.setFont(LUCIDA_SANS_UNICODE);
+		passwordLabel.setFont(LUCIDA_SANS_UNICODE);
 
 		usernameField = new JTextField(TEXT_FIELD_WIDTH);
 		passwordField = new JPasswordField(TEXT_FIELD_WIDTH);
@@ -92,6 +92,8 @@ public class LoginWindow extends JFrame implements ActionListener {
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.insets = new Insets(5, 10, 10, 10);
 		c.anchor = GridBagConstraints.CENTER;
+		loginButton.setBackground(LIGHT_BLUE);
+		loginButton.setFocusPainted(false);
 		gb.setConstraints(loginButton, c);
 		contentPane.add(loginButton);
 
