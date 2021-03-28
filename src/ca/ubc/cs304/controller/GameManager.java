@@ -110,10 +110,11 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
         ArrayList<LocationShop> results = dbHandler.countShopsByLocation();
     }
 
-    public ArrayList completedAllLocations() {
+    	// TODO: figure out what this is for
+    /*public ArrayList completedAllLocations() {
         ArrayList<Player> results = dbHandler.completedAllLocations();
 		return results;
-	}
+	}*/
 
 
 	/**
