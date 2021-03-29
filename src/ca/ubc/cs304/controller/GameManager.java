@@ -98,21 +98,21 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
     }
 
 
-    public void findPlayersConverses() {
-        ArrayList<Conversation> results = dbHandler.findPlayersConverses();
+    public ArrayList<Conversation> findPlayersConverses() {
+        return dbHandler.findPlayersConverses();
     }
 
-    public void findAllPlayersWithLevelsUnder25() {
-        ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder25();
+    public ArrayList<Player> findAllPlayersWithLevelsUnder25() {
+        return dbHandler.findAllPlayersWithLevelsUnder25();
     }
 
-    public void countShopsByLocation() {
-        ArrayList<LocationShop> results = dbHandler.countShopsByLocation();
+    public ArrayList<LocationShop> countShopsByLocation() {
+        return dbHandler.countShopsByLocation();
     }
 
-    public ArrayList completedAllLocations() {
-        ArrayList<Player> results = dbHandler.completedAllLocations();
-		return results;
+    //TODO: Refactor this to findPLayersThatBoughtFromAllLocations();
+    public ArrayList<Player> findPlayersThatBoughtFromAllLocations() {
+        return dbHandler.findPlayersThatBoughtFromAllLocations();
 	}
 
 

@@ -1,6 +1,9 @@
 package ca.ubc.cs304.ui;
 
 import ca.ubc.cs304.controller.GameManager;
+import ca.ubc.cs304.model.Conversation;
+import ca.ubc.cs304.model.LocationShop;
+import ca.ubc.cs304.model.Player;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -407,7 +410,9 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //TODO: print the results to the gui
+                        ArrayList<Conversation> conversations = delegate.findPlayersConverses();
+                        //TODO add conversations to gui
+                        System.out.println(conversations);
                         createResultsPane();
                         System.out.println("Select");
                     }
@@ -435,6 +440,9 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //TODO: print the results to the gui
+                        //TODO JOIN findAllPlayersWithLevelsUnder25();
+                        ArrayList<Player> players = delegate.findAllPlayersWithLevelsUnder25();
+                        System.out.println(players);
                         createResultsPane();
                         System.out.println("Join");
                     }
@@ -462,6 +470,9 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //TODO: print the results to the gui
+                        //TODO AGG w HAVING countShopsByLocation()
+                        ArrayList<LocationShop> shops = delegate.countShopsByLocation();
+                        System.out.println(shops);
                         createResultsPane();
                         System.out.println("aggregationHavingButton");
                     }
@@ -488,7 +499,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ArrayList result = delegate.completedAllLocations();
+                        ArrayList<Player> result = delegate.findPlayersThatBoughtFromAllLocations();
                         System.out.println(result);
 
                         // TODO format the result on gui

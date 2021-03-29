@@ -69,6 +69,7 @@ public class DatabaseConnectionHandler {
 		return result;
 	}
 
+	//WORKS
     public void deleteGivenWarrior(String playerID) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM Warrior WHERE ID = ?");
@@ -82,7 +83,7 @@ public class DatabaseConnectionHandler {
             rollbackConnection();
         }
     }
-
+    //WORKS
     public ArrayList<Conversation> findPlayersConverses() {
 	    ArrayList<Conversation> result = new ArrayList<Conversation>();
 
@@ -105,18 +106,18 @@ public class DatabaseConnectionHandler {
 
 	    return result;
     }
-
+    //WORKS
     public ArrayList<Player> findAllPlayersWithLevelsUnder25() {
         ArrayList<Player> result = new ArrayList<Player>();
 
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT p.ID, p.Username, xp.PlayerLevel FROM PlayerXPLevel as xp, PlayerCharacter as p WHERE xp.XP = p.XP AND xp.PlayerLevel < 25");
+            ResultSet rs = stmt.executeQuery("SELECT ID, Username, PlayerLevel FROM PlayerXPLevel xp, PlayerCharacter p WHERE xp.XP = p.XP AND xp.PlayerLevel < 25");
 
             while(rs.next()) {
                 Player model = new Player(
-                        rs.getString("PlayerID"),
-                        rs.getString("NPCName"),
+                        rs.getString("ID"),
+                        rs.getString("Username"),
                         rs.getInt("PlayerLevel"));
                 result.add(model);
             }
@@ -128,18 +129,18 @@ public class DatabaseConnectionHandler {
 
         return result;
     }
-
+    //WORKS
     public ArrayList<LocationShop> countShopsByLocation() {
         ArrayList<LocationShop> result = new ArrayList<LocationShop>();
 
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT LocationName, COUNT(ShopName) FROM Shop_IsIn GROUP BY LocationName HAVING InventoryAmount => 50");
+            ResultSet rs = stmt.executeQuery("SELECT LocationName, COUNT(ShopName) FROM Shop_IsIn GROUP BY LocationName HAVING SUM(InventoryAmount) > 50");
 
             while(rs.next()) {
                 LocationShop model = new LocationShop(
                         rs.getString("LocationName"),
-                        rs.getInt("COUNT(ShopName"));
+                        rs.getInt("COUNT(ShopName)"));
                 result.add(model);
             }
 
@@ -150,27 +151,18 @@ public class DatabaseConnectionHandler {
 
         return result;
     }
-
+    //WORKS
     public ArrayList<Player> findPlayersThatBoughtFromAllLocations() {
         ArrayList<Player> result = new ArrayList<Player>();
 
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT p.PlayerID, p.PlayerUsername" +
-                                                " FROM PlayerCharacter as p" +
-                                                " WHERE NOT EXISTS(" +
-                                                        " SELECT *" +
-                                                        " FROM Location as l" +
-                                                        " WHERE NOT EXISTS(" +
-                                                                " SELECT *" +
-                                                                " FROM BuysFrom as b" +
-                                                                " WHERE p.PlayerID = b.PlayerID AND" +
-                                                                " l.LocationName = b.LocationName");
+            ResultSet rs = stmt.executeQuery("SELECT ID, Username FROM PlayerCharacter p WHERE NOT EXISTS(SELECT * FROM Locations l WHERE NOT EXISTS(SELECT * FROM BuysFrom b WHERE p.ID = b.PlayerID AND l.LocationName = b.LocationName))");
 
             while(rs.next()) {
                 Player model = new Player(
-                        rs.getString("PlayerID"),
-                        rs.getString("PlayerUsername"),
+                        rs.getString("ID"),
+                        rs.getString("Username"),
                         null);
                 result.add(model);
             }
