@@ -89,7 +89,7 @@ public class DatabaseConnectionHandler {
 
 	    try {
 	        Statement stmt = connection.createStatement();
-	        ResultSet rs = stmt.executeQuery("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > '2020-01-01'");
+	        ResultSet rs = stmt.executeQuery("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > TO_DATE('2020/01/01', 'yyyy/mm/dd')");
 
             while(rs.next()) {
                 Conversation model = new Conversation(
