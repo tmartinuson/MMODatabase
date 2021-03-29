@@ -391,12 +391,12 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String location = updateLocation.getText().trim();
-                        String branch = updateLocation.getText().trim();
+                        String biome = updateBiome.getText().trim();
 
-                        if (isAnyStringNullOrEmpty(location, branch)) {
+                        if (isAnyStringNullOrEmpty(location, biome)) {
                             System.out.println("Please fill in the missing data");
                         } else {
-                            delegate.updateLocationBiome(location, branch);
+                            delegate.updateLocationBiome(location, biome);
                             createResultsPane();
                             resultsLabel.setText("Location's Biome updated!");
                             System.out.println("Location's Biome updated!");
@@ -503,7 +503,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         System.out.println(result);
 
                         // TODO format the result on gui
-                        resultsLabel.setText(String.valueOf(result));
+//                        resultsLabel.setText(String.valueOf(result));
                         System.out.println("Division: completedAllLocations");
                     }
                 }

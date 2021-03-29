@@ -180,12 +180,12 @@ public class DatabaseConnectionHandler {
 
 		try {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT LocationName, Count(DISTINCT Race) FROM Monster_isAt GROUP BY LocationName");
+			ResultSet rs = stmt.executeQuery("SELECT LocationName, Count(DISTINCT Race) AS count FROM Monster_isAt GROUP BY LocationName");
 
 			while(rs.next()) {
 				LocationRace model = new LocationRace(
 						rs.getString("LocationName"),
-						rs.getInt("Count(Race)"));
+						rs.getInt("count"));
 				result.add(model);
 			}
 			rs.close();
@@ -202,6 +202,11 @@ public class DatabaseConnectionHandler {
 		ArrayList<LocationAndPrice> result = new ArrayList<LocationAndPrice>();
 
 		try {
+			PreparedStatement ps2 = connection.prepareStatement("DROP VIEW Temp");
+			ps2.executeUpdate();
+			connection.commit();
+			ps2.close();
+
 			PreparedStatement ps = connection.prepareStatement(
 					"CREATE VIEW Temp(locationName, shopType, avgPrice) AS " +
 								"SELECT I.locationName, S.shopType, AVG(I.price) AS avgPrice " +
@@ -236,6 +241,14 @@ public class DatabaseConnectionHandler {
 	public void insertAssassinPlayerCharacter(String username, String id, int money,
 											  int xp, int attackPower) {
 		try {
+
+			PreparedStatement ps3 = connection.prepareStatement("INSERT INTO PlayerXPLevel VALUES (?,?)");
+			ps3.setInt(1, xp / 100 + 7); //TODO: replace with actual formula
+			ps3.setInt(2, xp);
+			ps3.executeUpdate();
+			connection.commit();
+			ps3.close();
+
 			PreparedStatement ps = connection.prepareStatement("INSERT INTO PlayerCharacter VALUES (?,?,?,?)");
 			ps.setString(1, username);
 			ps.setString(2, id);
@@ -264,7 +277,7 @@ public class DatabaseConnectionHandler {
 	
 	public void updateLocationBiome(String locName, String biome) {
 		try {
-		  PreparedStatement ps = connection.prepareStatement("UPDATE Location SET Biome = ? WHERE Name = ?");
+		  PreparedStatement ps = connection.prepareStatement("UPDATE Locations SET Biome = ? WHERE LocationName = ?");
 			ps.setString(1, biome);
 		  	ps.setString(2, locName);
 

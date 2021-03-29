@@ -115,7 +115,6 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
         return dbHandler.findPlayersThatBoughtFromAllLocations();
 	}
 
-
 	/**
 	 * TerminalTransactionsDelegate Implementation
 	 * 
