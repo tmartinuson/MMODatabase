@@ -239,21 +239,24 @@ public class DatabaseConnectionHandler {
 	}
 	
 	public void insertAssassinPlayerCharacter(String username, String id, int money,
-											  int xp, int attackPower) {
+											  int level, int attackPower) {
 		try {
-
 			PreparedStatement ps3 = connection.prepareStatement("INSERT INTO PlayerXPLevel VALUES (?,?)");
-			ps3.setInt(1, xp / 100 + 7); //TODO: replace with actual formula
-			ps3.setInt(2, xp);
+			ps3.setInt(1, level); //TODO: replace with actual formula
+			ps3.setInt(2, level * 1000);
 			ps3.executeUpdate();
 			connection.commit();
 			ps3.close();
-
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+		try {
 			PreparedStatement ps = connection.prepareStatement("INSERT INTO PlayerCharacter VALUES (?,?,?,?)");
 			ps.setString(1, username);
 			ps.setString(2, id);
 			ps.setInt(3, money);
-			ps.setInt(4, xp);
+			ps.setInt(4, level);
 			/*if (xp == 0) {
 				ps.setNull(5, java.sql.Types.INTEGER);
 			} else {
@@ -262,7 +265,11 @@ public class DatabaseConnectionHandler {
 			ps.executeUpdate();
 			connection.commit();
 			ps.close();
-
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+		try {
 			PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Assassin VALUES (?,?)");
 			ps2.setString(1, id);
 			ps2.setInt(2, attackPower);

@@ -24,7 +24,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
     private JTextField insertUsername;
     private JTextField insertId;
     private JTextField insertMoney;
-    private JTextField insertXp;
+    private JTextField insertLevel;
     private JTextField insertAttackPower;
     private JTextField deletePlayerId;
     private JTextField updateLocation;
@@ -46,7 +46,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         JLabel usernameLabel = new JLabel(JLABEL_FORMAT_1 + "Username"  + JLABEL_FORMAT_2);
         JLabel idLabel = new JLabel(JLABEL_FORMAT_1 + "Player Id"  + JLABEL_FORMAT_2);
         JLabel moneyLabel = new JLabel(JLABEL_FORMAT_1 + "Money"  + JLABEL_FORMAT_2);
-        JLabel xpLabel = new JLabel(JLABEL_FORMAT_1 + "XP"  + JLABEL_FORMAT_2);
+        JLabel levelLabel = new JLabel(JLABEL_FORMAT_1 + "Level"  + JLABEL_FORMAT_2);
         JLabel attackPowerLabel = new JLabel(JLABEL_FORMAT_1 + "Attack Power"  + JLABEL_FORMAT_2);
         JLabel playerIdLabel = new JLabel(JLABEL_FORMAT_1 + "Player Id"  + JLABEL_FORMAT_2);
         JLabel locationLabel = new JLabel(JLABEL_FORMAT_1 + "Location"  + JLABEL_FORMAT_2);
@@ -73,7 +73,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         insertUsername = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         insertId = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         insertMoney = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
-        insertXp = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
+        insertLevel = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         insertAttackPower = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         deletePlayerId = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         updateLocation = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
@@ -157,8 +157,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridx++;
         c.insets = new Insets(10, 10, 5, 0);
         c.anchor = GridBagConstraints.CENTER;
-        gb.setConstraints(xpLabel, c);
-        contentPane.add(xpLabel);
+        gb.setConstraints(levelLabel, c);
+        contentPane.add(levelLabel);
 
         // place attack power label
         c.gridx++;
@@ -202,8 +202,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridx++;
         c.insets = new Insets(10, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
-        gb.setConstraints(insertXp, c);
-        contentPane.add(insertXp);
+        gb.setConstraints(insertLevel, c);
+        contentPane.add(insertLevel);
 
         // place the text field for the attackPower
         c.gridx++;
@@ -353,14 +353,14 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         String username = insertUsername.getText().trim();
                         String id = insertId.getText().trim();
                         String money = insertMoney.getText().trim();
-                        String xp = insertXp.getText().trim();
+                        String level = insertLevel.getText().trim();
                         String attackPower = insertAttackPower.getText().trim();
 
-                        if (isAnyStringNullOrEmpty(username, id, money, xp, attackPower)) {
+                        if (isAnyStringNullOrEmpty(username, id, money, level, attackPower)) {
                             System.out.println("Please fill in the missing data");
                         } else {
                             delegate.insertAssassinPlayerCharacter(username, id, Integer.parseInt(money),
-                                    Integer.parseInt(xp), Integer.parseInt(attackPower));
+                                    Integer.parseInt(level), Integer.parseInt(attackPower));
                             createResultsPane();
                             resultsLabel.setText("New Assassin Player Added!");
                             System.out.println("New Assassin Player Added!");
@@ -534,6 +534,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         resultFrame.setTitle("Players That Bought From All Locations");
                         ArrayList<Player> result = delegate.findPlayersThatBoughtFromAllLocations();
                         System.out.println(result);
+
                         String[][] arrayOfItems = new String[result.size()][];
                         for (int j = 0; j < arrayOfItems.length; j++) {
                             String playerId = result.get(j).getPlayerID();
