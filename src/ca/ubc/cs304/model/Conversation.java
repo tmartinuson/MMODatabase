@@ -23,4 +23,12 @@ public class Conversation {
     public Date getConverseDate() {
         return converseDate;
     }
+
+    @Override
+    public String toString() {
+        return "playerId='" + playerId + '\'' +
+                ", NPCName='" + NPCName + '\'' +
+                ", converseDate=" + converseDate +
+                '}';
+    }
 }
