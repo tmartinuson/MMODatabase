@@ -21,4 +21,13 @@ public class Player {
     public Integer getPlayerLevel() {
         return playerLevel;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "playerID='" + playerID + '\'' +
+                ", playerUsername='" + playerUsername + '\'' +
+                ", playerLevel=" + playerLevel +
+                '}';
+    }
 }

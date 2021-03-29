@@ -9,6 +9,14 @@ public class LocationShop {
         this.shopCount = shopCount;
     }
 
+    @Override
+    public String toString() {
+        return "LocationShop{" +
+                "locationName='" + locationName + '\'' +
+                ", shopCount=" + shopCount +
+                '}';
+    }
+
     public String getLocationName() {
         return locationName;
     }

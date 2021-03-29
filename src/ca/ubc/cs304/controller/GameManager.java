@@ -99,6 +99,7 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
 
 
     public ArrayList<Conversation> findPlayersConverses() {
+
         ArrayList<Conversation> results = dbHandler.findPlayersConverses();
         return results;
     }
