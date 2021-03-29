@@ -188,7 +188,9 @@ grant select on Completes to public;
 
 CREATE TABLE MLevelRewardHealth (
                                     MonsterLevel INTEGER PRIMARY KEY,
-                                    Reward VARCHAR(50),
+                                    RewardXP INTEGER,
+                                    RewardMoney INTEGER,
+                                    RewardItemId INTEGER,
                                     Health INTEGER
 );
 
@@ -240,57 +242,59 @@ CREATE TABLE Participates(
 
 grant select on Participates to public;
 
-INSERT INTO PlayerXPLevel VALUES (1, 996);
-INSERT INTO PlayerXPLevel VALUES (18, 165098);
-INSERT INTO PlayerXPLevel VALUES (18, 178239);
-INSERT INTO PlayerXPLevel VALUES (27, 1128543);
-INSERT INTO PlayerXPLevel VALUES (30, 2056032);
-INSERT INTO PlayerXPLevel VALUES (36, 8421478);
-INSERT INTO PlayerXPLevel VALUES (45, 33000456);
-INSERT INTO PlayerXPLevel VALUES (50, 50000000);
-INSERT INTO PlayerXPLevel VALUES (34, 5049321);
-INSERT INTO PlayerXPLevel VALUES (44, 22490322);
-INSERT INTO PlayerXPLevel VALUES (12, 66543);
-INSERT INTO PlayerXPLevel VALUES (8, 28709);
-INSERT INTO PlayerXPLevel VALUES (39, 17829232);
-INSERT INTO PlayerXPLevel VALUES (46, 37452201);
 INSERT INTO PlayerXPLevel VALUES (1, 0);
-INSERT INTO PlayerXPLevel VALUES (1, 244);
-INSERT INTO PlayerXPLevel VALUES (1, 65);
-INSERT INTO PlayerXPLevel VALUES (1, 34235223);
+INSERT INTO PlayerXPLevel VALUES (2, 1000);
+INSERT INTO PlayerXPLevel VALUES (3, 2000);
+INSERT INTO PlayerXPLevel VALUES (4, 3000);
+INSERT INTO PlayerXPLevel VALUES (5, 4000);
+INSERT INTO PlayerXPLevel VALUES (6, 5000);
+INSERT INTO PlayerXPLevel VALUES (7, 6000);
+INSERT INTO PlayerXPLevel VALUES (8, 7000);
+INSERT INTO PlayerXPLevel VALUES (9, 8000);
+INSERT INTO PlayerXPLevel VALUES (10, 10000);
+INSERT INTO PlayerXPLevel VALUES (11, 15000);
+INSERT INTO PlayerXPLevel VALUES (12, 20000);
+INSERT INTO PlayerXPLevel VALUES (13, 25000);
+INSERT INTO PlayerXPLevel VALUES (14, 50000);
+INSERT INTO PlayerXPLevel VALUES (15, 75000);
+INSERT INTO PlayerXPLevel VALUES (16, 100000);
+INSERT INTO PlayerXPLevel VALUES (17, 125000);
+INSERT INTO PlayerXPLevel VALUES (18, 150000);
+INSERT INTO PlayerXPLevel VALUES (19, 175000);
+INSERT INTO PlayerXPLevel VALUES (20, 200000);
 
 INSERT INTO PlayerCharacter VALUES ('Spready', '34521', 3749, 996);
 INSERT INTO PlayerCharacter VALUES ('fangblade', '432567', 5432, 165098);
 INSERT INTO PlayerCharacter VALUES ('oopokays', '887', 0, 244);
 INSERT INTO PlayerCharacter VALUES ('yorroy', '12144', 0, 0);
-INSERT INTO PlayerCharacter VALUES ('SergRyu', '155', 0, 65);
+INSERT INTO PlayerCharacter VALUES ('SergRyu', '155', 50, 100);
 INSERT INTO PlayerCharacter VALUES ('Doublelift', '1122', 13456, 178239);
-INSERT INTO PlayerCharacter VALUES ('KumaClub', '33579', 3749, 1128543);
-INSERT INTO PlayerCharacter VALUES ('kittyx', '863', 1949754, 2056032);
-INSERT INTO PlayerCharacter VALUES ('cinnabunz', '4567', 2614681, 8421478);
-INSERT INTO PlayerCharacter VALUES ('Emiru', '26227', 24194, 33000456);
-INSERT INTO PlayerCharacter VALUES ('Faker', '10000', 245608778, 50000000);
-INSERT INTO PlayerCharacter VALUES ('FrameArms', '27493', 278401, 5049321);
-INSERT INTO PlayerCharacter VALUES ('RetroMuse', '432', 264, 22490322);
+INSERT INTO PlayerCharacter VALUES ('KumaClub', '33579', 3749, 155000);
+INSERT INTO PlayerCharacter VALUES ('kittyx', '863', 1949754, 32211);
+INSERT INTO PlayerCharacter VALUES ('cinnabunz', '4567', 2614681, 66788);
+INSERT INTO PlayerCharacter VALUES ('Emiru', '26227', 24194, 12234);
+INSERT INTO PlayerCharacter VALUES ('Faker', '10000', 245608778, 300000);
+INSERT INTO PlayerCharacter VALUES ('FrameArms', '27493', 278401, 111999);
+INSERT INTO PlayerCharacter VALUES ('RetroMuse', '432', 264, 3322);
 INSERT INTO PlayerCharacter VALUES ('Dunkey', '20958', 20855, 66543);
 INSERT INTO PlayerCharacter VALUES ('ZyraPlant', '8644', 108752, 28709);
-INSERT INTO PlayerCharacter VALUES ('Lilyyyxx', '78', 2948, 17829232);
-INSERT INTO PlayerCharacter VALUES ('Geegee', '1098', 29957, 37452201);
-INSERT INTO PlayerCharacter VALUES ('UberHaxor', '15624', 40099932, 50000000);
+INSERT INTO PlayerCharacter VALUES ('Lilyyyxx', '78', 2948, 122411);
+INSERT INTO PlayerCharacter VALUES ('Geegee', '1098', 29957, 4433);
+INSERT INTO PlayerCharacter VALUES ('UberHaxor', '15624', 40099932, 200000);
 
 INSERT INTO Assassin VALUES ('155', 0);
 INSERT INTO Assassin VALUES ('34521', 10);
 INSERT INTO Assassin VALUES ('432567', 180);
 INSERT INTO Assassin VALUES ('1122', 180);
 INSERT INTO Assassin VALUES ('33579', 270);
-INSERT INTO Assassin VALUES ('863', 300);
+INSERT INTO Assassin VALUES ('863', 100);
 
 INSERT INTO Warrior VALUES ('887', 0);
 INSERT INTO Warrior VALUES ('4567', 360);
-INSERT INTO Warrior VALUES ('26227', 450);
+INSERT INTO Warrior VALUES ('26227', 300);
 INSERT INTO Warrior VALUES ('10000', 500);
-INSERT INTO Warrior VALUES ('27493', 340);
-INSERT INTO Warrior VALUES ('432', 440);
+INSERT INTO Warrior VALUES ('27493', 430);
+INSERT INTO Warrior VALUES ('432', 40);
 
 INSERT INTO Mage VALUES ('12144', NULL);
 INSERT INTO Mage VALUES ('20958', 'Flash Frost');
@@ -393,15 +397,15 @@ INSERT INTO Completes VALUES ('Henney', '15624');
 INSERT INTO Completes VALUES ('Perion', '34521');
 INSERT INTO Completes VALUES ('Perion', '10000');
 
-INSERT INTO MLevelRewardHealth VALUES (1, '5 XP, 5 Gold', 10);
-INSERT INTO MLevelRewardHealth VALUES (5, '15 XP, 15 Gold, Potion drop', 85);
-INSERT INTO MLevelRewardHealth VALUES (10, '125 XP, 50 Gold, Occasional item drop', 220);
-INSERT INTO MLevelRewardHealth VALUES (35, '450 XP, 150 Gold, Occasional item drop', 70000);
-INSERT INTO MLevelRewardHealth VALUES (50, '3250 XP, 1060 Gold, Occasional item drop', 500550);
-INSERT INTO MLevelRewardHealth VALUES (66, '6750 XP, 2200 Gold, Occasional item drop', 700950);
-INSERT INTO MLevelRewardHealth VALUES (83, '20550 XP, 4300 Gold, Occasional item drop', 900000);
-INSERT INTO MLevelRewardHealth VALUES (95, '45800 XP, 9500 Gold, Guaranteed item drop', 1100500);
-INSERT INTO MLevelRewardHealth VALUES (100, '50000 XP, 11500 Gold, Guaranteed item drop', 1500000);
+INSERT INTO MLevelRewardHealth VALUES (1, 5, 5, NULL, 10);
+INSERT INTO MLevelRewardHealth VALUES (5, 15, 15, 17894, 85);
+INSERT INTO MLevelRewardHealth VALUES (10, 125 , 50 , 18849, 220);
+INSERT INTO MLevelRewardHealth VALUES (35, 300, 150, 324, 70000);
+INSERT INTO MLevelRewardHealth VALUES (50, 500, 800, 98392, 500550);
+INSERT INTO MLevelRewardHealth VALUES (66, 1000, 1400, 1984, 700950);
+INSERT INTO MLevelRewardHealth VALUES (83, 1500, 2500, 314, 900000);
+INSERT INTO MLevelRewardHealth VALUES (95, 1800, 3100, 15699, 1100500);
+INSERT INTO MLevelRewardHealth VALUES (100, 2000, 3800, 5332, 1500000);
 
 INSERT INTO Monster_isAt VALUES ('Yordle', '3017', 'Normal', 1, 'Henney');
 INSERT INTO Monster_isAt VALUES ('Treeant', '2223', 'Wind', 5, 'Henney');

@@ -488,11 +488,11 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        /*ArrayList result = delegate.completedAllLocations();
-                        System.out.println(result);*/
+//                        ArrayList result = delegate.findPlayersThatBoughtFromAllLocations();
+//                        System.out.println(result);
 
                         // TODO format the result on gui
-                        //resultsLabel.setText(String.valueOf(result));
+//                        resultsLabel.setText(String.valueOf(result));
                         System.out.println("Division: completedAllLocations");
                     }
                 }
