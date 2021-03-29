@@ -22,8 +22,8 @@ DROP TABLE PlayerCharacter;
 DROP TABLE PlayerXPLevel;
 
 CREATE TABLE PlayerXPLevel(
-                              PlayerLevel INTEGER DEFAULT 1,
-                              XP INTEGER PRIMARY KEY
+                              PlayerLevel INTEGER PRIMARY KEY,
+                              XP INTEGER
 );
 
 grant select on PlayerXPLevel to public;
@@ -32,8 +32,8 @@ CREATE TABLE PlayerCharacter(
                                 Username VARCHAR(20) UNIQUE,
                                 ID VARCHAR(10) PRIMARY KEY,
                                 PlayerMoney INTEGER,
-                                XP INTEGER DEFAULT 0,
-                                FOREIGN KEY (XP) REFERENCES PlayerXPLevel
+                                PlayerLevel INTEGER DEFAULT 1,
+                                FOREIGN KEY (PlayerLevel) REFERENCES PlayerXPLevel
 );
 
 grant select on PlayerCharacter to public;
@@ -263,24 +263,24 @@ INSERT INTO PlayerXPLevel VALUES (18, 150000);
 INSERT INTO PlayerXPLevel VALUES (19, 175000);
 INSERT INTO PlayerXPLevel VALUES (20, 200000);
 
-INSERT INTO PlayerCharacter VALUES ('Spready', '34521', 3749, 996);
-INSERT INTO PlayerCharacter VALUES ('fangblade', '432567', 5432, 165098);
-INSERT INTO PlayerCharacter VALUES ('oopokays', '887', 0, 244);
-INSERT INTO PlayerCharacter VALUES ('yorroy', '12144', 0, 0);
-INSERT INTO PlayerCharacter VALUES ('SergRyu', '155', 50, 100);
-INSERT INTO PlayerCharacter VALUES ('Doublelift', '1122', 13456, 178239);
-INSERT INTO PlayerCharacter VALUES ('KumaClub', '33579', 3749, 155000);
-INSERT INTO PlayerCharacter VALUES ('kittyx', '863', 1949754, 32211);
-INSERT INTO PlayerCharacter VALUES ('cinnabunz', '4567', 2614681, 66788);
-INSERT INTO PlayerCharacter VALUES ('Emiru', '26227', 24194, 12234);
-INSERT INTO PlayerCharacter VALUES ('Faker', '10000', 245608778, 300000);
-INSERT INTO PlayerCharacter VALUES ('FrameArms', '27493', 278401, 111999);
-INSERT INTO PlayerCharacter VALUES ('RetroMuse', '432', 264, 3322);
-INSERT INTO PlayerCharacter VALUES ('Dunkey', '20958', 20855, 66543);
-INSERT INTO PlayerCharacter VALUES ('ZyraPlant', '8644', 108752, 28709);
-INSERT INTO PlayerCharacter VALUES ('Lilyyyxx', '78', 2948, 122411);
-INSERT INTO PlayerCharacter VALUES ('Geegee', '1098', 29957, 4433);
-INSERT INTO PlayerCharacter VALUES ('UberHaxor', '15624', 40099932, 200000);
+INSERT INTO PlayerCharacter VALUES ('Spready', '34521', 3749, 1);
+INSERT INTO PlayerCharacter VALUES ('fangblade', '432567', 5432, 18);
+INSERT INTO PlayerCharacter VALUES ('oopokays', '887', 0, 1);
+INSERT INTO PlayerCharacter VALUES ('yorroy', '12144', 0, 1);
+INSERT INTO PlayerCharacter VALUES ('SergRyu', '155', 50, 1);
+INSERT INTO PlayerCharacter VALUES ('Doublelift', '1122', 13456, 19);
+INSERT INTO PlayerCharacter VALUES ('KumaClub', '33579', 3749, 18);
+INSERT INTO PlayerCharacter VALUES ('kittyx', '863', 1949754, 13);
+INSERT INTO PlayerCharacter VALUES ('cinnabunz', '4567', 2614681, 14);
+INSERT INTO PlayerCharacter VALUES ('Emiru', '26227', 24194, 10);
+INSERT INTO PlayerCharacter VALUES ('Faker', '10000', 245608778, 13);
+INSERT INTO PlayerCharacter VALUES ('FrameArms', '27493', 278401, 16);
+INSERT INTO PlayerCharacter VALUES ('RetroMuse', '432', 264, 4);
+INSERT INTO PlayerCharacter VALUES ('Dunkey', '20958', 20855, 14);
+INSERT INTO PlayerCharacter VALUES ('ZyraPlant', '8644', 108752, 13);
+INSERT INTO PlayerCharacter VALUES ('Lilyyyxx', '78', 2948, 16);
+INSERT INTO PlayerCharacter VALUES ('Geegee', '1098', 29957, 5);
+INSERT INTO PlayerCharacter VALUES ('UberHaxor', '15624', 40099932, 20);
 
 INSERT INTO Assassin VALUES ('155', 0);
 INSERT INTO Assassin VALUES ('34521', 10);
