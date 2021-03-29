@@ -61,7 +61,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 + JLABEL_FORMAT_2);
         JButton projectButton = new JButton(JLABEL_FORMAT_1 + "Show the items with corresponding<br/>" +
                 "stats shop names, and location names" + JLABEL_FORMAT_2);
-        JButton joinButton = new JButton("Show all players who are under level 25");
+        JButton joinButton = new JButton("Show all players who are under level 5");
         JButton aggregationGroupButton = new JButton(JLABEL_FORMAT_1 + "Show the number of monster<br/>races at each location" + JLABEL_FORMAT_2);
         JButton aggregationHavingButton = new JButton(JLABEL_FORMAT_1 + "Show the numbers of shops at<br/>each location with inventory<br/>" +
                 "amount greater than or equal to 50." + JLABEL_FORMAT_2);
@@ -454,16 +454,17 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
-                        resultFrame.setTitle("Number of Monster Races by Location");
+                        resultFrame.setTitle("Players Under a Specified Level");
                         ArrayList<Player> result = delegate.findAllPlayersWithLevelsUnder25();
                         String[][] arrayOfItems = new String[result.size()][];
                         for (int j = 0; j < arrayOfItems.length; j++) {
                             String playerId = result.get(j).getPlayerID();
                             String username = result.get(j).getPlayerUsername();
                             Integer level = result.get(j).getPlayerLevel();
-                            arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level)};
+                            Integer xp = result.get(j).getPlayerXP();
+                            arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level), Integer.toString(xp)};
                         }
-                        String[] column ={"Id","Username", "Level"};
+                        String[] column ={"Id","Username", "Level", "Threshold XP"};
                         setupTable(resultFrame, arrayOfItems, column);
                     }
                 }

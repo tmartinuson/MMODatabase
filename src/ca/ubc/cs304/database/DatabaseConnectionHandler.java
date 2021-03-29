@@ -112,13 +112,14 @@ public class DatabaseConnectionHandler {
 
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT ID, Username, PlayerLevel FROM PlayerXPLevel xp, PlayerCharacter p WHERE xp.XP = p.XP AND xp.PlayerLevel < 25");
+            ResultSet rs = stmt.executeQuery("Select id, username, xp.playerlevel, xp.xp from playerxplevel xp, playercharacter p where xp.playerlevel = p.playerlevel and xp.playerlevel < 10");
 
             while(rs.next()) {
                 Player model = new Player(
                         rs.getString("ID"),
                         rs.getString("Username"),
-                        rs.getInt("PlayerLevel"));
+                        rs.getInt("PlayerLevel"),
+                		rs.getInt("XP"));
                 result.add(model);
             }
 
@@ -163,7 +164,8 @@ public class DatabaseConnectionHandler {
                 Player model = new Player(
                         rs.getString("ID"),
                         rs.getString("Username"),
-                        null);
+                        null,
+						null);
                 result.add(model);
             }
 
