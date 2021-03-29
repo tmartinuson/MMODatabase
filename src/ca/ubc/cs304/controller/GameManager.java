@@ -77,18 +77,18 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
     }
 
 
-	public ArrayList countRaceByLocation() {
+	public ArrayList<LocationRace> countRaceByLocation() {
 		ArrayList<LocationRace> results = dbHandler.countRaceByLocation();
 		return results;
 	}
 
 
-	public ArrayList nestedPriceQuery() {
+	public ArrayList<LocationAndPrice> nestedPriceQuery() {
     	ArrayList<LocationAndPrice> results = dbHandler.nestedPriceQuery();
 		return results;
 	}
 
-	public ArrayList projectFromItems() {
+	public ArrayList<SimplifiedItemModel> projectFromItems() {
     	ArrayList<SimplifiedItemModel> results = dbHandler.projectFromItems();
 		return results;
 	}
@@ -99,21 +99,26 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
 
 
     public ArrayList<Conversation> findPlayersConverses() {
-        return dbHandler.findPlayersConverses();
+
+        ArrayList<Conversation> results = dbHandler.findPlayersConverses();
+        return results;
     }
 
     public ArrayList<Player> findAllPlayersWithLevelsUnder25() {
-        return dbHandler.findAllPlayersWithLevelsUnder25();
+        ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder25();
+        return results;
     }
 
     public ArrayList<LocationShop> countShopsByLocation() {
-        return dbHandler.countShopsByLocation();
+        ArrayList<LocationShop> results = dbHandler.countShopsByLocation();
+        return results;
     }
 
-    //TODO: Refactor this to findPLayersThatBoughtFromAllLocations();
     public ArrayList<Player> findPlayersThatBoughtFromAllLocations() {
-        return dbHandler.findPlayersThatBoughtFromAllLocations();
+        ArrayList<Player> results = dbHandler.findPlayersThatBoughtFromAllLocations();
+		return results;
 	}
+
 
 	/**
 	 * TerminalTransactionsDelegate Implementation

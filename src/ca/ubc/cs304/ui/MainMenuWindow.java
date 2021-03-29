@@ -1,9 +1,7 @@
 package ca.ubc.cs304.ui;
 
 import ca.ubc.cs304.controller.GameManager;
-import ca.ubc.cs304.model.Conversation;
-import ca.ubc.cs304.model.LocationShop;
-import ca.ubc.cs304.model.Player;
+import ca.ubc.cs304.model.*;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -12,7 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainMenuWindow extends JFrame implements ActionListener {
     // constants
@@ -285,7 +286,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridx+=3;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
-        selectButton.setFocusPainted(false);
+        projectButton.setFocusPainted(false);
         gb.setConstraints(projectButton, c);
         contentPane.add(projectButton);
 
@@ -295,7 +296,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridy++;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
-        selectButton.setFocusPainted(false);
+        joinButton.setFocusPainted(false);
         gb.setConstraints(joinButton, c);
         contentPane.add(joinButton);
 
@@ -303,7 +304,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridx+=3;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
-        selectButton.setFocusPainted(false);
+        aggregationGroupButton.setFocusPainted(false);
         gb.setConstraints(aggregationGroupButton, c);
         contentPane.add(aggregationGroupButton);
 
@@ -313,7 +314,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridy++;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
-        selectButton.setFocusPainted(false);
+        aggregationHavingButton.setFocusPainted(false);
         gb.setConstraints(aggregationHavingButton, c);
         contentPane.add(aggregationHavingButton);
 
@@ -321,7 +322,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridx+=3;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
-        selectButton.setFocusPainted(false);
+        nestedAggregationButton.setFocusPainted(false);
         gb.setConstraints(nestedAggregationButton, c);
         contentPane.add(nestedAggregationButton);
 
@@ -332,7 +333,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridy++;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
-        quitOption.setFocusPainted(false);
+        divisionButton.setFocusPainted(false);
         gb.setConstraints(divisionButton, c);
         contentPane.add(divisionButton);
 
@@ -386,6 +387,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 }
         );
 
+        // TODO: put dropdown menu for locations
         updateButton.addActionListener(
                 new ActionListener() {
                     @Override
@@ -405,16 +407,23 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 }
         );
 
-        // TODO need method from Tristan
+        // TODO: fix this error: literal does not match format string
         selectButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ArrayList<Conversation> conversations = delegate.findPlayersConverses();
-                        //TODO add conversations to gui
-                        System.out.println(conversations);
-                        createResultsPane();
-                        System.out.println("Select");
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Player Converses with NPC on Specific Date");
+                        ArrayList<Conversation> result = delegate.findPlayersConverses();
+                        String[][] arrayOfItems = new String[result.size()][];
+                        for (int j = 0; j < arrayOfItems.length; j++) {
+                            String playerId = result.get(j).getPlayerId();
+                            String npcName = result.get(j).getNPCName();
+                            String converseDate = result.get(j).getConverseDate().toString();
+                            arrayOfItems[j] = new String[]{playerId, npcName, converseDate};
+                        }
+                        String[] column ={"Player ID", "NPC", "Date Conversed"};
+                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
@@ -423,14 +432,19 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //TODO: print the results to the gui
-                        createResultsPane();
-                        ArrayList result = delegate.projectFromItems();
-                        System.out.println(result);
-
-                        // TODO format the result on gui
-                        resultsLabel.setText(String.valueOf(result));
-                        System.out.println("Project: projectFromItems");
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Items: Stats, Shop, Location");
+                        ArrayList<SimplifiedItemModel> result = delegate.projectFromItems();
+                        String[][] arrayOfItems = new String[result.size()][];
+                        for (int j = 0; j < arrayOfItems.length; j++) {
+                                String itemId = result.get(j).getId();
+                                String itemStats = result.get(j).getStats();
+                                String shopName = result.get(j).getShopName();
+                                String locationName = result.get(j).getLocationName();
+                                arrayOfItems[j] = new String[]{itemId, itemStats, shopName, locationName};
+                        }
+                        String[] column ={"Item ID","Stats","Shop Name","Location Name"};
+                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
@@ -439,12 +453,18 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //TODO: print the results to the gui
-                        //TODO JOIN findAllPlayersWithLevelsUnder25();
-                        ArrayList<Player> players = delegate.findAllPlayersWithLevelsUnder25();
-                        System.out.println(players);
-                        createResultsPane();
-                        System.out.println("Join");
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Number of Monster Races by Location");
+                        ArrayList<Player> result = delegate.findAllPlayersWithLevelsUnder25();
+                        String[][] arrayOfItems = new String[result.size()][];
+                        for (int j = 0; j < arrayOfItems.length; j++) {
+                            String playerId = result.get(j).getPlayerID();
+                            String username = result.get(j).getPlayerUsername();
+                            Integer level = result.get(j).getPlayerLevel();
+                            arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level)};
+                        }
+                        String[] column ={"Id","Username", "Level"};
+                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
@@ -453,28 +473,36 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        createResultsPane();
-                        ArrayList result = delegate.countRaceByLocation();
-                        System.out.println(result);
-
-                        // TODO format the result on gui
-                        resultsLabel.setText(String.valueOf(result));
-                        System.out.println("AggregationGroup: countRaceByLocation");
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Number of Monster Races by Location");
+                        ArrayList<LocationRace> result = delegate.countRaceByLocation();
+                        String[][] arrayOfItems = new String[result.size()][];
+                        for (int j = 0; j < arrayOfItems.length; j++) {
+                            String location = result.get(j).getLocation();
+                            Integer raceNum = result.get(j).getRaceCount();
+                            arrayOfItems[j] = new String[]{location, Integer.toString(raceNum)};
+                        }
+                        String[] column ={"Location","Number of Monster Races"};
+                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
 
-        // TODO get method from Tristan
         aggregationHavingButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //TODO: print the results to the gui
-                        //TODO AGG w HAVING countShopsByLocation()
-                        ArrayList<LocationShop> shops = delegate.countShopsByLocation();
-                        System.out.println(shops);
-                        createResultsPane();
-                        System.out.println("aggregationHavingButton");
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Shops with Inventory Amount of 50+ at Each Location");
+                        ArrayList<LocationShop> result = delegate.countShopsByLocation();
+                        String[][] arrayOfItems = new String[result.size()][];
+                        for (int j = 0; j < arrayOfItems.length; j++) {
+                            String location = result.get(j).getLocationName();
+                            Integer shopCount = result.get(j).getShopCount();
+                            arrayOfItems[j] = new String[]{location, Integer.toString(shopCount)};
+                        }
+                        String[] column ={"Location","Number of Shops"};
+                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
@@ -483,14 +511,17 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //TODO: print the results to the gui
-                        createResultsPane();
-                        ArrayList result = delegate.nestedPriceQuery();
-                        System.out.println(result);
-
-                        // TODO format the result on gui
-                        resultsLabel.setText(String.valueOf(result));
-                        System.out.println("Nested: nestedPriceQuery");
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Most Expensive Item at Each Location");
+                        ArrayList<LocationAndPrice> result = delegate.nestedPriceQuery();
+                        String[][] arrayOfItems = new String[result.size()][];
+                        for (int j = 0; j < arrayOfItems.length; j++) {
+                            String location = result.get(j).getLocation();
+                            double maxPrice = result.get(j).getMaxPrice();
+                            arrayOfItems[j] = new String[]{location, Double.toString(maxPrice)};
+                        }
+                        String[] column ={"Location","Price"};
+                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
@@ -499,15 +530,24 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Players That Bought From All Locations");
                         ArrayList<Player> result = delegate.findPlayersThatBoughtFromAllLocations();
                         System.out.println(result);
 
-                        // TODO format the result on gui
-                        resultsLabel.setText(String.valueOf(result));
-                        System.out.println("Division: completedAllLocations");
+                        String[][] arrayOfItems = new String[result.size()][];
+                        for (int j = 0; j < arrayOfItems.length; j++) {
+                            String playerId = result.get(j).getPlayerID();
+                            String username = result.get(j).getPlayerUsername();
+                            Integer level = result.get(j).getPlayerLevel();
+                            arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level)};
+                        }
+                        String[] column ={"Id","Username", "Level"};
+                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
+
         quitOption.addActionListener(
                 new ActionListener() {
                     @Override
@@ -558,50 +598,30 @@ public class MainMenuWindow extends JFrame implements ActionListener {
     }
 
     // create results panel
-    public void createResultsPane() {
+    private JFrame createResultsPane() {
+
         JFrame resultFrame = new JFrame();
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         resultFrame.setBackground(Color.white);
-
-        // layout results using the GridBag layout manager
-        GridBagLayout gb2 = new GridBagLayout();
-        GridBagConstraints c2 = new GridBagConstraints();
-        resultFrame.setLayout(gb2);
-        c2.gridwidth = 1;
-        c2.gridx = 0;
-        c2.gridy = 1;
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        resultFrame.getContentPane().add(panel);
-        panel.setOpaque(true);
-        // place optionMessage label
-
-        c2.insets = new Insets(10, 10, 5, 0);
-        c2.anchor = GridBagConstraints.CENTER;
-        gb2.setConstraints(resultsLabel, c2);
-        panel.add(resultsLabel);
-//        JScrollPane scroller = new JScrollPane(resultsLabel);
-//        scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//        scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//        panel.add(scroller);
 
         // center the frame
         Dimension d = resultFrame.getToolkit().getScreenSize();
         Rectangle r = resultFrame.getBounds();
         resultFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
-
-        // size the window to obtain a best fit for the components
-        resultFrame.pack();
-        resultFrame.setSize(500, 500);
-
-
-        // make the window visible
+        resultFrame.setSize(700,400);
         resultFrame.setLocationByPlatform(true);
         resultFrame.setVisible(true);
+
+        return resultFrame;
     }
 
-
-
+    private void setupTable(JFrame resultFrame, String[][] data, String[] column) {
+        JTable resultTable = new JTable(data,column);
+        resultTable.setEnabled(false);
+        resultTable.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
+        resultTable.getTableHeader().setBackground(LoginWindow.LIGHT_BLUE);
+        resultTable.setBounds(30,40,500,500);
+        JScrollPane scrollPane = new JScrollPane(resultTable);
+        resultFrame.add(scrollPane);
+    }
 
 }
