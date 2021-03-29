@@ -77,18 +77,18 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
     }
 
 
-	public ArrayList countRaceByLocation() {
+	public ArrayList<LocationRace> countRaceByLocation() {
 		ArrayList<LocationRace> results = dbHandler.countRaceByLocation();
 		return results;
 	}
 
 
-	public ArrayList nestedPriceQuery() {
+	public ArrayList<LocationAndPrice> nestedPriceQuery() {
     	ArrayList<LocationAndPrice> results = dbHandler.nestedPriceQuery();
 		return results;
 	}
 
-	public ArrayList projectFromItems() {
+	public ArrayList<SimplifiedItemModel> projectFromItems() {
     	ArrayList<SimplifiedItemModel> results = dbHandler.projectFromItems();
 		return results;
 	}
@@ -98,23 +98,25 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
     }
 
 
-    public void findPlayersConverses() {
+    public ArrayList<Conversation> findPlayersConverses() {
         ArrayList<Conversation> results = dbHandler.findPlayersConverses();
+        return results;
     }
 
-    public void findAllPlayersWithLevelsUnder25() {
+    public ArrayList<Player> findAllPlayersWithLevelsUnder25() {
         ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder25();
+        return results;
     }
 
-    public void countShopsByLocation() {
+    public ArrayList<LocationShop> countShopsByLocation() {
         ArrayList<LocationShop> results = dbHandler.countShopsByLocation();
+        return results;
     }
 
-	// TODO fix this division call
-    /*public ArrayList findPlayersThatBoughtFromAllLocations() {
+    public ArrayList<Player> findPlayersThatBoughtFromAllLocations() {
         ArrayList<Player> results = dbHandler.findPlayersThatBoughtFromAllLocations();
 		return results;
-	}*/
+	}
 
 
 	/**
