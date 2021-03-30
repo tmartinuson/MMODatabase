@@ -98,14 +98,14 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
     }
 
 
-    public ArrayList<Conversation> findPlayersConverses() {
+    public ArrayList<Conversation> findPlayersConverses(String date) {
 
-        ArrayList<Conversation> results = dbHandler.findPlayersConverses();
+        ArrayList<Conversation> results = dbHandler.findPlayersConverses(date);
         return results;
     }
 
-    public ArrayList<Player> findAllPlayersWithLevelsUnder25() {
-        ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder25();
+    public ArrayList<Player> findAllPlayersWithLevelsUnder25(int level) {
+        ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder25(level);
         return results;
     }
 

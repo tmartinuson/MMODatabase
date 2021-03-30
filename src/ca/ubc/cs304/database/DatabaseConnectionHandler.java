@@ -84,12 +84,15 @@ public class DatabaseConnectionHandler {
         }
     }
     //WORKS
-    public ArrayList<Conversation> findPlayersConverses() {
+    public ArrayList<Conversation> findPlayersConverses(String date) {
 	    ArrayList<Conversation> result = new ArrayList<Conversation>();
-
+		date = "2019/01/01"; //TODO: remove hard code date
 	    try {
-	        Statement stmt = connection.createStatement();
-	        ResultSet rs = stmt.executeQuery("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > TO_DATE('2020/01/01', 'yyyy/mm/dd')");
+			PreparedStatement ps = connection.prepareStatement("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > TO_DATE(?, 'yyyy/mm/dd')");
+			ps.setString(1, date);
+			ps.executeUpdate();
+			connection.commit();
+	        ResultSet rs = ps.getResultSet();
 
             while(rs.next()) {
                 Conversation model = new Conversation(
@@ -98,7 +101,7 @@ public class DatabaseConnectionHandler {
                         rs.getDate("converseDate"));
                 result.add(model);
             }
-
+			ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
@@ -107,13 +110,15 @@ public class DatabaseConnectionHandler {
 	    return result;
     }
     //WORKS
-    public ArrayList<Player> findAllPlayersWithLevelsUnder25() {
+    public ArrayList<Player> findAllPlayersWithLevelsUnder25(int level) {
         ArrayList<Player> result = new ArrayList<Player>();
-
+		level = 16; //TODO: remove hard code!
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("Select id, username, xp.playerlevel, xp.xp from playerxplevel xp, playercharacter p where xp.playerlevel = p.playerlevel and xp.playerlevel < 10");
-
+			PreparedStatement ps = connection.prepareStatement("Select id, username, xp.playerlevel, xp.xp from playerxplevel xp, playercharacter p where xp.playerlevel = p.playerlevel and xp.playerlevel < ?");
+			ps.setInt(1, level);
+			ps.executeUpdate();
+			connection.commit();
+			ResultSet rs = ps.getResultSet();
             while(rs.next()) {
                 Player model = new Player(
                         rs.getString("ID"),
@@ -122,7 +127,7 @@ public class DatabaseConnectionHandler {
                 		rs.getInt("XP"));
                 result.add(model);
             }
-
+			ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
