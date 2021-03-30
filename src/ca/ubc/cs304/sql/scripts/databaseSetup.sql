@@ -22,8 +22,8 @@ DROP TABLE PlayerCharacter;
 DROP TABLE PlayerXPLevel;
 
 CREATE TABLE PlayerXPLevel(
-                              PlayerLevel INTEGER DEFAULT 1,
-                              XP INTEGER PRIMARY KEY
+                              PlayerLevel INTEGER PRIMARY KEY,
+                              XP INTEGER
 );
 
 grant select on PlayerXPLevel to public;
@@ -32,8 +32,8 @@ CREATE TABLE PlayerCharacter(
                                 Username VARCHAR(20) UNIQUE,
                                 ID VARCHAR(10) PRIMARY KEY,
                                 PlayerMoney INTEGER,
-                                XP INTEGER DEFAULT 0,
-                                FOREIGN KEY (XP) REFERENCES PlayerXPLevel
+                                PlayerLevel INTEGER DEFAULT 1,
+                                FOREIGN KEY (PlayerLevel) REFERENCES PlayerXPLevel ON DELETE CASCADE
 );
 
 grant select on PlayerCharacter to public;
@@ -41,8 +41,7 @@ grant select on PlayerCharacter to public;
 CREATE TABLE Assassin(
                          ID VARCHAR(10) PRIMARY KEY,
                          AttackPower INTEGER,
-                         FOREIGN KEY (ID) REFERENCES PlayerCharacter
-                             ON DELETE CASCADE
+                         FOREIGN KEY (ID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
 grant select on Assassin to public;
@@ -52,8 +51,7 @@ grant select on Assassin to public;
 CREATE TABLE Warrior(
                         ID VARCHAR(10) PRIMARY KEY,
                         DefensePower INTEGER,
-                        FOREIGN KEY (ID) REFERENCES PlayerCharacter
-                            ON DELETE CASCADE
+                        FOREIGN KEY (ID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
 grant select on Warrior to public;
@@ -63,8 +61,7 @@ grant select on Warrior to public;
 CREATE TABLE Mage(
                      ID VARCHAR(10) PRIMARY KEY,
                      PrimarySpell VARCHAR(20),
-                     FOREIGN KEY (ID) REFERENCES PlayerCharacter
-                         ON DELETE CASCADE
+                     FOREIGN KEY (ID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
 grant select on Mage to public;
@@ -74,8 +71,8 @@ CREATE TABLE GamesWith(
                           PartyName VARCHAR(20),
                           IDPlayer2 VARCHAR(10),
                           PRIMARY KEY (IDPlayer1, IDPlayer2),
-                          FOREIGN KEY (IDPlayer1) REFERENCES PlayerCharacter,
-                          FOREIGN KEY (IDPlayer2) REFERENCES PlayerCharacter
+                          FOREIGN KEY (IDPlayer1) REFERENCES PlayerCharacter ON DELETE CASCADE,
+                          FOREIGN KEY (IDPlayer2) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
 grant select on GamesWith to public;
@@ -100,7 +97,7 @@ CREATE TABLE Shop_IsIn(
                           ShopType VARCHAR(20),
                           InventoryAmount INTEGER,
                           PRIMARY KEY (ShopName, LocationName),
-                          FOREIGN KEY (LocationName) REFERENCES Locations
+                          FOREIGN KEY (LocationName) REFERENCES Locations ON DELETE CASCADE
 );
 
 grant select on Shop_IsIn to public;
@@ -112,9 +109,8 @@ CREATE TABLE Item_Equips_Sells(
                                   ShopName VARCHAR(20) NOT NULL,
                                   LocationName VARCHAR(20) NOT NULL,
                                   PlayerID VARCHAR(10),
-                                  FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn
-                                      ON DELETE SET NULL,
-                                  FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter
+                                  FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn ON DELETE CASCADE,
+                                  FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
 grant select on Item_Equips_Sells to public;
@@ -123,8 +119,8 @@ CREATE TABLE NonPlayerCharacter_Gives(
                                          NPCName VARCHAR(20) PRIMARY KEY,
                                          Miniquest VARCHAR(70),
                                          ItemID VARCHAR(10),
-                                         FOREIGN KEY (ItemID) REFERENCES Item_Equips_Sells,
-                                         FOREIGN KEY (Miniquest) REFERENCES NPCQuestXP
+                                         FOREIGN KEY (ItemID) REFERENCES Item_Equips_Sells ON DELETE CASCADE,
+                                         FOREIGN KEY (Miniquest) REFERENCES NPCQuestXP ON DELETE CASCADE
 );
 
 grant select on NonPlayerCharacter_Gives to public;
@@ -134,8 +130,8 @@ CREATE TABLE Converses(
                           converseDate DATE,
                           NPCName VARCHAR(20),
                           PRIMARY KEY (PlayerID, NPCName),
-                          FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
-                          FOREIGN KEY (NPCName) REFERENCES NonPlayerCharacter_Gives
+                          FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter ON DELETE CASCADE,
+                          FOREIGN KEY (NPCName) REFERENCES NonPlayerCharacter_Gives ON DELETE CASCADE
 );
 
 grant select on Converses to public;
@@ -156,8 +152,8 @@ CREATE TABLE Rewards(
                         EventStartDate DATE NOT NULL,
                         EventEndDate DATE NOT NULL,
                         PRIMARY KEY (ItemID, EventName, EventStartDate, EventEndDate),
-                        FOREIGN KEY (ItemID) REFERENCES Item_Equips_Sells,
-                        FOREIGN KEY (EventName, EventStartDate, EventEndDate) REFERENCES Events
+                        FOREIGN KEY (ItemID) REFERENCES Item_Equips_Sells ON DELETE CASCADE,
+                        FOREIGN KEY (EventName, EventStartDate, EventEndDate) REFERENCES Events ON DELETE CASCADE
 );
 
 grant select on Rewards to public;
@@ -168,8 +164,8 @@ CREATE TABLE BuysFrom(
                          ShopName VARCHAR(20),
                          LocationName VARCHAR(20),
                          PRIMARY KEY (PlayerID, ShopName, LocationName),
-                         FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn,
-                         FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter
+                         FOREIGN KEY (ShopName, LocationName) REFERENCES Shop_IsIn ON DELETE CASCADE,
+                         FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
 grant select on BuysFrom to public;
@@ -179,9 +175,8 @@ CREATE TABLE Completes(
                           LocationName VARCHAR(20),
                           PlayerID VARCHAR(10),
                           PRIMARY KEY (LocationName, PlayerID),
-                          FOREIGN KEY (LocationName) REFERENCES Locations,
-                          FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter
-                              ON DELETE CASCADE
+                          FOREIGN KEY (LocationName) REFERENCES Locations ON DELETE CASCADE,
+                          FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
 grant select on Completes to public;
@@ -203,8 +198,8 @@ CREATE TABLE Monster_isAt (
                               MonsterType VARCHAR(20),
                               MonsterLevel INTEGER,
                               LocationName VARCHAR(20),
-                              FOREIGN KEY (LocationName) REFERENCES Locations,
-                              FOREIGN KEY (MonsterLevel) REFERENCES MLevelRewardHealth
+                              FOREIGN KEY (LocationName) REFERENCES Locations ON DELETE CASCADE,
+                              FOREIGN KEY (MonsterLevel) REFERENCES MLevelRewardHealth ON DELETE CASCADE
 );
 
 grant select on Monster_isAt to public;
@@ -213,8 +208,8 @@ CREATE TABLE Fights(
                        MonsterID VARCHAR(10),
                        PlayerID VARCHAR(10),
                        PRIMARY KEY (MonsterID, PlayerID),
-                       FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
-                       FOREIGN KEY (MonsterID) REFERENCES Monster_IsAt
+                       FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter ON DELETE CASCADE,
+                       FOREIGN KEY (MonsterID) REFERENCES Monster_IsAt ON DELETE CASCADE
 );
 
 grant select on Fights to public;
@@ -226,7 +221,7 @@ CREATE TABLE Quest_Contains(
                                EventName VARCHAR(30),
                                EventStartDate DATE,
                                EventEndDate DATE,
-                               FOREIGN KEY (EventName, EventStartDate, EventEndDate) REFERENCES Events
+                               FOREIGN KEY (EventName, EventStartDate, EventEndDate) REFERENCES Events ON DELETE CASCADE
 );
 
 grant select on Quest_Contains to public;
@@ -236,8 +231,8 @@ CREATE TABLE Participates(
                              PlayerID VARCHAR(10),
                              QStatus SMALLINT,
                              PRIMARY KEY (QuestTitle, PlayerID),
-                             FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter,
-                             FOREIGN KEY (QuestTitle) REFERENCES Quest_Contains
+                             FOREIGN KEY (PlayerID) REFERENCES PlayerCharacter ON DELETE CASCADE,
+                             FOREIGN KEY (QuestTitle) REFERENCES Quest_Contains ON DELETE CASCADE
 );
 
 grant select on Participates to public;
@@ -263,24 +258,24 @@ INSERT INTO PlayerXPLevel VALUES (18, 150000);
 INSERT INTO PlayerXPLevel VALUES (19, 175000);
 INSERT INTO PlayerXPLevel VALUES (20, 200000);
 
-INSERT INTO PlayerCharacter VALUES ('Spready', '34521', 3749, 996);
-INSERT INTO PlayerCharacter VALUES ('fangblade', '432567', 5432, 165098);
-INSERT INTO PlayerCharacter VALUES ('oopokays', '887', 0, 244);
-INSERT INTO PlayerCharacter VALUES ('yorroy', '12144', 0, 0);
-INSERT INTO PlayerCharacter VALUES ('SergRyu', '155', 50, 100);
-INSERT INTO PlayerCharacter VALUES ('Doublelift', '1122', 13456, 178239);
-INSERT INTO PlayerCharacter VALUES ('KumaClub', '33579', 3749, 155000);
-INSERT INTO PlayerCharacter VALUES ('kittyx', '863', 1949754, 32211);
-INSERT INTO PlayerCharacter VALUES ('cinnabunz', '4567', 2614681, 66788);
-INSERT INTO PlayerCharacter VALUES ('Emiru', '26227', 24194, 12234);
-INSERT INTO PlayerCharacter VALUES ('Faker', '10000', 245608778, 300000);
-INSERT INTO PlayerCharacter VALUES ('FrameArms', '27493', 278401, 111999);
-INSERT INTO PlayerCharacter VALUES ('RetroMuse', '432', 264, 3322);
-INSERT INTO PlayerCharacter VALUES ('Dunkey', '20958', 20855, 66543);
-INSERT INTO PlayerCharacter VALUES ('ZyraPlant', '8644', 108752, 28709);
-INSERT INTO PlayerCharacter VALUES ('Lilyyyxx', '78', 2948, 122411);
-INSERT INTO PlayerCharacter VALUES ('Geegee', '1098', 29957, 4433);
-INSERT INTO PlayerCharacter VALUES ('UberHaxor', '15624', 40099932, 200000);
+INSERT INTO PlayerCharacter VALUES ('Spready', '34521', 3749, 1);
+INSERT INTO PlayerCharacter VALUES ('fangblade', '432567', 5432, 18);
+INSERT INTO PlayerCharacter VALUES ('oopokays', '887', 0, 1);
+INSERT INTO PlayerCharacter VALUES ('yorroy', '12144', 0, 1);
+INSERT INTO PlayerCharacter VALUES ('SergRyu', '155', 50, 1);
+INSERT INTO PlayerCharacter VALUES ('Doublelift', '1122', 13456, 19);
+INSERT INTO PlayerCharacter VALUES ('KumaClub', '33579', 3749, 18);
+INSERT INTO PlayerCharacter VALUES ('kittyx', '863', 1949754, 13);
+INSERT INTO PlayerCharacter VALUES ('cinnabunz', '4567', 2614681, 14);
+INSERT INTO PlayerCharacter VALUES ('Emiru', '26227', 24194, 10);
+INSERT INTO PlayerCharacter VALUES ('Faker', '10000', 245608778, 13);
+INSERT INTO PlayerCharacter VALUES ('FrameArms', '27493', 278401, 16);
+INSERT INTO PlayerCharacter VALUES ('RetroMuse', '432', 264, 4);
+INSERT INTO PlayerCharacter VALUES ('Dunkey', '20958', 20855, 14);
+INSERT INTO PlayerCharacter VALUES ('ZyraPlant', '8644', 108752, 13);
+INSERT INTO PlayerCharacter VALUES ('Lilyyyxx', '78', 2948, 16);
+INSERT INTO PlayerCharacter VALUES ('Geegee', '1098', 29957, 5);
+INSERT INTO PlayerCharacter VALUES ('UberHaxor', '15624', 40099932, 20);
 
 INSERT INTO Assassin VALUES ('155', 0);
 INSERT INTO Assassin VALUES ('34521', 10);

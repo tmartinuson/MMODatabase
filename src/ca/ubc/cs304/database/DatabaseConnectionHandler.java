@@ -72,7 +72,7 @@ public class DatabaseConnectionHandler {
 	//WORKS
     public void deleteGivenWarrior(String playerID) {
         try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM Warrior WHERE ID = ?");
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM PlayerCharacter WHERE ID = ?");
 			      ps.setString(1, playerID);
 
 			      ps.executeUpdate();
@@ -89,7 +89,7 @@ public class DatabaseConnectionHandler {
 
 	    try {
 	        Statement stmt = connection.createStatement();
-	        ResultSet rs = stmt.executeQuery("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > '2020-01-01'");
+	        ResultSet rs = stmt.executeQuery("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > TO_DATE('2020/01/01', 'yyyy/mm/dd')");
 
             while(rs.next()) {
                 Conversation model = new Conversation(
@@ -112,13 +112,14 @@ public class DatabaseConnectionHandler {
 
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT ID, Username, PlayerLevel FROM PlayerXPLevel xp, PlayerCharacter p WHERE xp.XP = p.XP AND xp.PlayerLevel < 25");
+            ResultSet rs = stmt.executeQuery("Select id, username, xp.playerlevel, xp.xp from playerxplevel xp, playercharacter p where xp.playerlevel = p.playerlevel and xp.playerlevel < 10");
 
             while(rs.next()) {
                 Player model = new Player(
                         rs.getString("ID"),
                         rs.getString("Username"),
-                        rs.getInt("PlayerLevel"));
+                        rs.getInt("PlayerLevel"),
+                		rs.getInt("XP"));
                 result.add(model);
             }
 
@@ -163,7 +164,8 @@ public class DatabaseConnectionHandler {
                 Player model = new Player(
                         rs.getString("ID"),
                         rs.getString("Username"),
-                        null);
+                        null,
+						null);
                 result.add(model);
             }
 
@@ -239,21 +241,24 @@ public class DatabaseConnectionHandler {
 	}
 	
 	public void insertAssassinPlayerCharacter(String username, String id, int money,
-											  int xp, int attackPower) {
+											  int level, int attackPower) {
 		try {
-
 			PreparedStatement ps3 = connection.prepareStatement("INSERT INTO PlayerXPLevel VALUES (?,?)");
-			ps3.setInt(1, xp / 100 + 7); //TODO: replace with actual formula
-			ps3.setInt(2, xp);
+			ps3.setInt(1, level); //TODO: replace with actual formula
+			ps3.setInt(2, level * 1000);
 			ps3.executeUpdate();
 			connection.commit();
 			ps3.close();
-
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+		try {
 			PreparedStatement ps = connection.prepareStatement("INSERT INTO PlayerCharacter VALUES (?,?,?,?)");
 			ps.setString(1, username);
 			ps.setString(2, id);
 			ps.setInt(3, money);
-			ps.setInt(4, xp);
+			ps.setInt(4, level);
 			/*if (xp == 0) {
 				ps.setNull(5, java.sql.Types.INTEGER);
 			} else {
@@ -262,7 +267,11 @@ public class DatabaseConnectionHandler {
 			ps.executeUpdate();
 			connection.commit();
 			ps.close();
-
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+		try {
 			PreparedStatement ps2 = connection.prepareStatement("INSERT INTO Assassin VALUES (?,?)");
 			ps2.setString(1, id);
 			ps2.setInt(2, attackPower);
