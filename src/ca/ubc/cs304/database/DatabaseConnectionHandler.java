@@ -213,7 +213,11 @@ public class DatabaseConnectionHandler {
 			ps2.executeUpdate();
 			connection.commit();
 			ps2.close();
-
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+		try {
 			PreparedStatement ps = connection.prepareStatement(
 					"CREATE VIEW Temp(locationName, shopType, avgPrice) AS " +
 								"SELECT I.locationName, S.shopType, AVG(I.price) AS avgPrice " +
@@ -223,7 +227,11 @@ public class DatabaseConnectionHandler {
 			ps.executeUpdate();
 			connection.commit();
 			ps.close();
-
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+		try {
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT locationName, MAX(avgPrice) " +
 												"FROM Temp " +

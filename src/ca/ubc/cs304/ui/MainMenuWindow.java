@@ -65,7 +65,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         JButton aggregationGroupButton = new JButton(JLABEL_FORMAT_1 + "Show the number of monster<br/>races at each location" + JLABEL_FORMAT_2);
         JButton aggregationHavingButton = new JButton(JLABEL_FORMAT_1 + "Show the numbers of shops at<br/>each location with inventory<br/>" +
                 "amount greater than or equal to 50." + JLABEL_FORMAT_2);
-        JButton nestedAggregationButton = new JButton(JLABEL_FORMAT_1 + "Show prices of the most expensive<br/>item sold at every location" + JLABEL_FORMAT_2);
+        JButton nestedAggregationButton = new JButton(JLABEL_FORMAT_1 + "Show prices of the most expensive<br/>after averaging by shop type in location" + JLABEL_FORMAT_2);
         JButton divisionButton = new JButton(JLABEL_FORMAT_1 + "Show the players who have purchased an<br/>item at every location" + JLABEL_FORMAT_2);
         JButton quitOption = new JButton("Quit");
 
