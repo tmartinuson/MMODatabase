@@ -61,7 +61,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 + JLABEL_FORMAT_2);
         JButton projectButton = new JButton(JLABEL_FORMAT_1 + "Show the items with corresponding<br/>" +
                 "stats shop names, and location names" + JLABEL_FORMAT_2);
-        JButton joinButton = new JButton("Show all players who are under level 5");
+        JButton joinButton = new JButton("Show all players who are under level");
         JButton aggregationGroupButton = new JButton(JLABEL_FORMAT_1 + "Show the number of monster<br/>races at each location" + JLABEL_FORMAT_2);
         JButton aggregationHavingButton = new JButton(JLABEL_FORMAT_1 + "Show the numbers of shops at<br/>each location with inventory<br/>" +
                 "amount greater than or equal to 50." + JLABEL_FORMAT_2);
@@ -414,7 +414,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Player Converses with NPC on Specific Date");
-                        ArrayList<Conversation> result = delegate.findPlayersConverses();
+                        String date = null; //TODO: Yukie pull in date from field in format yyyy/mm/dd
+                        ArrayList<Conversation> result = delegate.findPlayersConverses(date);
                         String[][] arrayOfItems = new String[result.size()][];
                         for (int j = 0; j < arrayOfItems.length; j++) {
                             String playerId = result.get(j).getPlayerId();
@@ -455,7 +456,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Players Under a Specified Level");
-                        ArrayList<Player> result = delegate.findAllPlayersWithLevelsUnder25();
+                        int levelInput = 0; //TODO: Yukie feed level from text field
+                        ArrayList<Player> result = delegate.findAllPlayersWithLevelsUnder25(levelInput);
                         String[][] arrayOfItems = new String[result.size()][];
                         for (int j = 0; j < arrayOfItems.length; j++) {
                             String playerId = result.get(j).getPlayerID();
