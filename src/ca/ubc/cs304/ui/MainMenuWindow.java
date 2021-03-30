@@ -540,10 +540,9 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         for (int j = 0; j < arrayOfItems.length; j++) {
                             String playerId = result.get(j).getPlayerID();
                             String username = result.get(j).getPlayerUsername();
-                            Integer level = result.get(j).getPlayerLevel();
-                            arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level)};
+                            arrayOfItems[j] = new String[]{playerId, username};
                         }
-                        String[] column ={"Id","Username", "Level"};
+                        String[] column ={"Id","Username"};
                         setupTable(resultFrame, arrayOfItems, column);
                     }
                 }

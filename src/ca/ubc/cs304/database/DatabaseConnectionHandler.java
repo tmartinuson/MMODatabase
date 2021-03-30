@@ -72,7 +72,7 @@ public class DatabaseConnectionHandler {
 	//WORKS
     public void deleteGivenWarrior(String playerID) {
         try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM Warrior WHERE ID = ?");
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM PlayerCharacter WHERE ID = ?");
 			      ps.setString(1, playerID);
 
 			      ps.executeUpdate();
