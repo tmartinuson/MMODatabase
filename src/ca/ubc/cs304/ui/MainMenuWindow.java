@@ -416,7 +416,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Delete Warrior Player");
                         String playerId = deletePlayerId.getText().trim();
-
                         if (isAnyStringNullOrEmpty(playerId)) {
                             setupPrintStatements(resultFrame, missingData);
                         } else if (Pattern.matches("[a-zA-Z]+", playerId)) {
