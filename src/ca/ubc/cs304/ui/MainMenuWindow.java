@@ -442,7 +442,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                             updateLocation.setText("");
                             updateBiome.setText("");
                             setupPrintStatements(resultFrame, "Location's Biome updated!");
-                            System.out.println("Location's Biome updated to " + biome + "!");
                         }
                     }
                 }
@@ -594,7 +593,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Players That Bought From All Locations");
                         ArrayList<Player> result = delegate.findPlayersThatBoughtFromAllLocations();
-                        System.out.println(result);
 
                         String[][] arrayOfItems = new String[result.size()][];
                         for (int j = 0; j < arrayOfItems.length; j++) {
@@ -666,7 +664,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
     }
 
     private void handleQuitOption() {
-        System.out.println("Good Bye!");
         delegate.terminalTransactionsFinished();
     }
 
