@@ -110,7 +110,7 @@ public class DatabaseConnectionHandler {
 	    return result;
     }
     //WORKS
-    public ArrayList<Player> findAllPlayersWithLevelsUnder25(int level) {
+    public ArrayList<Player> findAllPlayersWithLevelsUnder(int level) {
         ArrayList<Player> result = new ArrayList<Player>();
 		level = 16; //TODO: remove hard code!
         try {

@@ -4,16 +4,12 @@ import ca.ubc.cs304.controller.GameManager;
 import ca.ubc.cs304.model.*;
 
 import javax.swing.*;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainMenuWindow extends JFrame implements ActionListener {
     // constants
@@ -29,6 +25,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
     private JTextField deletePlayerId;
     private JTextField updateLocation;
     private JTextField updateBiome;
+    private JTextField selectDate;
+    private JTextField joinLevel;
     private JLabel resultsLabel = new JLabel("");
 
     // delegate
@@ -40,6 +38,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
     public void showFrame(GameManager delegate) {
         this.delegate = delegate;
+        String missingData = "Please fill in the missing information.";
 
         // create labels
         JLabel optionMessage = new JLabel(JLABEL_FORMAT_1 + "Please select an action" + JLABEL_FORMAT_2);
@@ -51,6 +50,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         JLabel playerIdLabel = new JLabel(JLABEL_FORMAT_1 + "Player Id"  + JLABEL_FORMAT_2);
         JLabel locationLabel = new JLabel(JLABEL_FORMAT_1 + "Location"  + JLABEL_FORMAT_2);
         JLabel biomeLabel = new JLabel(JLABEL_FORMAT_1 + "Biome"  + JLABEL_FORMAT_2);
+        JLabel dateLabel = new JLabel(JLABEL_FORMAT_1 + "Date"  + JLABEL_FORMAT_2);
+        JLabel levelLabel2 = new JLabel(JLABEL_FORMAT_1 + "Level"  + JLABEL_FORMAT_2);
 
         // create buttons
         JButton insertButton = new JButton("Add an Assassin Player");
@@ -78,6 +79,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         deletePlayerId = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         updateLocation = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         updateBiome = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
+        selectDate = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
+        joinLevel = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
 
         // TODO make a forloop for this
         // set font
@@ -275,20 +278,26 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         // place the selectButton button
         c.gridwidth = 3;
         c.gridx = 0;
-        c.gridy++;
+        c.gridy+=3;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
         selectButton.setFocusPainted(false);
         gb.setConstraints(selectButton, c);
         contentPane.add(selectButton);
 
-        // place the projectButton button
-        c.gridx+=3;
+        // place the select date label
+        c.gridx+=2;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
-        projectButton.setFocusPainted(false);
-        gb.setConstraints(projectButton, c);
-        contentPane.add(projectButton);
+        gb.setConstraints(dateLabel, c);
+        contentPane.add(dateLabel);
+
+        // place the select date field
+        c.gridx++;
+        c.insets = new Insets(5, 10, 10, 10);
+        c.anchor = GridBagConstraints.CENTER;
+        gb.setConstraints(selectDate, c);
+        contentPane.add(selectDate);
 
         // new row
         // place the joinButton button
@@ -300,13 +309,37 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         gb.setConstraints(joinButton, c);
         contentPane.add(joinButton);
 
+        // place the join level label
+        c.gridx+=2;
+        c.insets = new Insets(5, 10, 10, 10);
+        c.anchor = GridBagConstraints.CENTER;
+        gb.setConstraints(levelLabel2, c);
+        contentPane.add(levelLabel2);
+
+        // place the join level field
+        c.gridx++;
+        c.insets = new Insets(5, 10, 10, 10);
+        c.anchor = GridBagConstraints.CENTER;
+        gb.setConstraints(joinLevel, c);
+        contentPane.add(joinLevel);
+
+        // new row
         // place the aggregationGroupBy button
-        c.gridx+=3;
+        c.gridx = 0;
+        c.gridy++;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
         aggregationGroupButton.setFocusPainted(false);
         gb.setConstraints(aggregationGroupButton, c);
         contentPane.add(aggregationGroupButton);
+
+        // place the divisionButton button
+        c.gridx+=3;
+        c.insets = new Insets(5, 10, 10, 10);
+        c.anchor = GridBagConstraints.CENTER;
+        divisionButton.setFocusPainted(false);
+        gb.setConstraints(divisionButton, c);
+        contentPane.add(divisionButton);
 
         // new row
         // place the aggregationHavingButton button
@@ -326,19 +359,9 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         gb.setConstraints(nestedAggregationButton, c);
         contentPane.add(nestedAggregationButton);
 
-        // new row
-        // place the divisionButton button
-        c.gridwidth = 3;
-        c.gridx = 1;
-        c.gridy++;
-        c.insets = new Insets(5, 10, 10, 10);
-        c.anchor = GridBagConstraints.CENTER;
-        divisionButton.setFocusPainted(false);
-        gb.setConstraints(divisionButton, c);
-        contentPane.add(divisionButton);
-
         // place the quitOption button
-        c.gridy++;
+        c.gridx = 1;
+        c.gridy+=3;
         c.insets = new Insets(5, 10, 10, 10);
         c.anchor = GridBagConstraints.CENTER;
         quitOption.setFocusPainted(false);
@@ -350,6 +373,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Add Assassin Player");
                         String username = insertUsername.getText().trim();
                         String id = insertId.getText().trim();
                         String money = insertMoney.getText().trim();
@@ -357,13 +382,13 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         String attackPower = insertAttackPower.getText().trim();
 
                         if (isAnyStringNullOrEmpty(username, id, money, level, attackPower)) {
-                            System.out.println("Please fill in the missing data");
+                            setupPrintStatements(resultFrame, missingData);
                         } else {
                             delegate.insertAssassinPlayerCharacter(username, id, Integer.parseInt(money),
                                     Integer.parseInt(level), Integer.parseInt(attackPower));
-                            createResultsPane();
-                            resultsLabel.setText("New Assassin Player Added!");
-                            System.out.println("New Assassin Player Added!");
+
+
+                            setupPrintStatements(resultFrame, "New Assassin Player, " + username + " Added!");
                         }
                     }
                 }
@@ -373,15 +398,15 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Delete Warrior Player");
                         String playerId = deletePlayerId.getText().trim();
 
                         if (isAnyStringNullOrEmpty(playerId)) {
-                            System.out.println("Please fill in the missing data");
+                            setupPrintStatements(resultFrame, missingData);
                         } else {
                             delegate.deleteGivenWarrior(playerId);
-                            createResultsPane();
-                            resultsLabel.setText("Warrior #" + playerId + " Deleted!");
-                            System.out.println("Warrior #" + playerId + " Deleted!");
+                            setupPrintStatements(resultFrame, "Warrior #" + playerId + " Deleted!");
                         }
                     }
                 }
@@ -392,39 +417,45 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        JFrame resultFrame = createResultsPane();
+                        resultFrame.setTitle("Update Location's Biome");
                         String location = updateLocation.getText().trim();
                         String biome = updateBiome.getText().trim();
 
                         if (isAnyStringNullOrEmpty(location, biome)) {
-                            System.out.println("Please fill in the missing data");
+                            setupPrintStatements(resultFrame, missingData);
                         } else {
                             delegate.updateLocationBiome(location, biome);
-                            createResultsPane();
-                            resultsLabel.setText("Location's Biome updated!");
-                            System.out.println("Location's Biome updated!");
+                            setupPrintStatements(resultFrame, "Location's Biome updated!");
+                            System.out.println("Location's Biome updated to " + biome + "!");
                         }
                     }
                 }
         );
 
-        // TODO: fix this error: literal does not match format string
         selectButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Player Converses with NPC on Specific Date");
-                        String date = null; //TODO: Yukie pull in date from field in format yyyy/mm/dd
-                        ArrayList<Conversation> result = delegate.findPlayersConverses(date);
-                        String[][] arrayOfItems = new String[result.size()][];
-                        for (int j = 0; j < arrayOfItems.length; j++) {
-                            String playerId = result.get(j).getPlayerId();
-                            String npcName = result.get(j).getNPCName();
-                            String converseDate = result.get(j).getConverseDate().toString();
-                            arrayOfItems[j] = new String[]{playerId, npcName, converseDate};
+                        //TODO: Yukie pull in date from field in format yyyy/mm/dd
+                        String date = selectDate.getText().trim();
+
+                        if (isAnyStringNullOrEmpty(date)) {
+                            setupPrintStatements(resultFrame, missingData);
+                        } else {
+                            ArrayList<Conversation> result = delegate.findPlayersConverses(date);
+                            String[][] arrayOfItems = new String[result.size()][];
+                            for (int j = 0; j < arrayOfItems.length; j++) {
+                                String playerId = result.get(j).getPlayerId();
+                                String npcName = result.get(j).getNPCName();
+                                String converseDate = result.get(j).getConverseDate().toString();
+                                arrayOfItems[j] = new String[]{playerId, npcName, converseDate};
+                            }
+                            String[] column = {"Player ID", "NPC", "Date Conversed"};
+                            setupTable(resultFrame, arrayOfItems, column);
                         }
-                        String[] column ={"Player ID", "NPC", "Date Conversed"};
-                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
@@ -456,18 +487,23 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Players Under a Specified Level");
-                        int levelInput = 0; //TODO: Yukie feed level from text field
-                        ArrayList<Player> result = delegate.findAllPlayersWithLevelsUnder25(levelInput);
-                        String[][] arrayOfItems = new String[result.size()][];
-                        for (int j = 0; j < arrayOfItems.length; j++) {
-                            String playerId = result.get(j).getPlayerID();
-                            String username = result.get(j).getPlayerUsername();
-                            Integer level = result.get(j).getPlayerLevel();
-                            Integer xp = result.get(j).getPlayerXP();
-                            arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level), Integer.toString(xp)};
+                        String joinlevel = joinLevel.getText().trim();
+
+                        if (isAnyStringNullOrEmpty(joinlevel)) {
+                            setupPrintStatements(resultFrame, missingData);
+                        } else {
+                            ArrayList<Player> result = delegate.findAllPlayersWithLevelsUnder(Integer.parseInt(joinlevel));
+                            String[][] arrayOfItems = new String[result.size()][];
+                            for (int j = 0; j < arrayOfItems.length; j++) {
+                                String playerId = result.get(j).getPlayerID();
+                                String username = result.get(j).getPlayerUsername();
+                                Integer level = result.get(j).getPlayerLevel();
+                                Integer xp = result.get(j).getPlayerXP();
+                                arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level), Integer.toString(xp)};
+                            }
+                            String[] column = {"Id", "Username", "Level", "Threshold XP"};
+                            setupTable(resultFrame, arrayOfItems, column);
                         }
-                        String[] column ={"Id","Username", "Level", "Threshold XP"};
-                        setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
         );
@@ -485,7 +521,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                             Integer raceNum = result.get(j).getRaceCount();
                             arrayOfItems[j] = new String[]{location, Integer.toString(raceNum)};
                         }
-                        String[] column ={"Location","Number of Monster Races"};
+                        String[] column = {"Location","Number of Monster Races"};
                         setupTable(resultFrame, arrayOfItems, column);
                     }
                 }
@@ -580,6 +616,24 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
         // place the cursor in the text field for the username
         insertUsername.requestFocus();
+    }
+
+    private void setupPrintStatements(JFrame resultFrame, String message) {
+        // layout components using the GridBag layout manager
+        GridBagLayout gb = new GridBagLayout();
+        GridBagConstraints c = new GridBagConstraints();
+        resultFrame.setLayout(gb);
+        c.gridwidth = 1;
+        c.gridx = 0;
+        c.gridy = 1;
+
+        resultsLabel.setText(message);
+
+        // place resultsLabel label
+        c.insets = new Insets(10, 10, 5, 0);
+        c.anchor = GridBagConstraints.CENTER;
+        gb.setConstraints(resultsLabel, c);
+        resultFrame.add(resultsLabel);
     }
 
     public static boolean isAnyStringNullOrEmpty(String... strings) {
