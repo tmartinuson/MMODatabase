@@ -86,7 +86,6 @@ public class DatabaseConnectionHandler {
     //WORKS
     public ArrayList<Conversation> findPlayersConverses(String date) {
 	    ArrayList<Conversation> result = new ArrayList<Conversation>();
-		date = "2019/01/01"; //TODO: remove hard code date
 	    try {
 			PreparedStatement ps = connection.prepareStatement("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > TO_DATE(?, 'yyyy/mm/dd')");
 			ps.setString(1, date);
@@ -112,7 +111,6 @@ public class DatabaseConnectionHandler {
     //WORKS
     public ArrayList<Player> findAllPlayersWithLevelsUnder(int level) {
         ArrayList<Player> result = new ArrayList<Player>();
-		level = 16; //TODO: remove hard code!
         try {
 			PreparedStatement ps = connection.prepareStatement("Select id, username, xp.playerlevel, xp.xp from playerxplevel xp, playercharacter p where xp.playerlevel = p.playerlevel and xp.playerlevel < ?");
 			ps.setInt(1, level);
