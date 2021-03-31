@@ -25,11 +25,11 @@ public class MainMenuWindow extends JFrame implements ActionListener {
     private JTextField insertLevel;
     private JTextField insertAttackPower;
     private JTextField deletePlayerId;
-    private JTextField updateLocation;
     private JTextField updateBiome;
     private JTextField selectDate;
     private JTextField joinLevel;
     private JLabel resultsLabel = new JLabel("");
+    private String currentLocation = "Ludi";
 
     // delegate
     private GameManager delegate;
@@ -79,10 +79,13 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         insertLevel = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         insertAttackPower = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         deletePlayerId = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
-        updateLocation = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         updateBiome = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         selectDate = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         joinLevel = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
+
+        // for dropdown menu
+        String[] locations = {"Ludi", "Kerning", "Ellinia", "Henney", "Perion"};
+        final JComboBox<String> locationDropDown = new JComboBox<String>(locations);
 
         // TODO make a forloop for this
         // set font
@@ -90,6 +93,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         insertButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         deleteButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         updateButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
+        locationDropDown.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         selectButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         projectButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         joinButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
@@ -104,6 +108,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         insertButton.setBackground(LoginWindow.LIGHT_BLUE);
         deleteButton.setBackground(LoginWindow.LIGHT_BLUE);
         updateButton.setBackground(LoginWindow.LIGHT_BLUE);
+        locationDropDown.setBackground(LoginWindow.LIGHT_BLUE);
         selectButton.setBackground(LoginWindow.LIGHT_BLUE);
         projectButton.setBackground(LoginWindow.LIGHT_BLUE);
         joinButton.setBackground(LoginWindow.LIGHT_BLUE);
@@ -266,8 +271,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         c.gridx = 1;
         c.insets = new Insets(10, 10, 5, 0);
         c.anchor = GridBagConstraints.CENTER;
-        gb.setConstraints(updateLocation, c);
-        contentPane.add(updateLocation);
+        gb.setConstraints(locationDropDown, c);
+        contentPane.add(locationDropDown);
 
         // the text field for the biome
         c.gridx++;
@@ -425,6 +430,17 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 }
         );
 
+        locationDropDown.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JComboBox locationJCB = (JComboBox)e.getSource();
+                        String location = (String)locationJCB.getSelectedItem();
+                        currentLocation = location;
+                    }
+                }
+        );
+
         // TODO: put dropdown menu for locations
         updateButton.addActionListener(
                 new ActionListener() {
@@ -432,14 +448,12 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Update Location's Biome");
-                        String location = updateLocation.getText().trim();
                         String biome = updateBiome.getText().trim();
 
-                        if (isAnyStringNullOrEmpty(location, biome)) {
+                        if (isAnyStringNullOrEmpty(currentLocation, biome)) {
                             setupPrintStatements(resultFrame, missingData);
                         } else {
-                            delegate.updateLocationBiome(location, biome);
-                            updateLocation.setText("");
+                            delegate.updateLocationBiome(currentLocation, biome);
                             updateBiome.setText("");
                             setupPrintStatements(resultFrame, "Location's Biome updated!");
                         }
