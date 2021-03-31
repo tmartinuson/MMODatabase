@@ -60,11 +60,11 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         JButton deleteButton = new JButton("Delete a Warrior Player");
         JButton updateButton = new JButton("Update a Location's Biome");
         JButton selectButton = new JButton(JLABEL_FORMAT_1 + "Show the players who have conversed with" +
-                "<br/>an NPC after Jan 1st, 2021 including the dates."
+                "<br/>an NPC after the specified date"
                 + JLABEL_FORMAT_2);
         JButton projectButton = new JButton(JLABEL_FORMAT_1 + "Show the items with corresponding<br/>" +
                 "stats shop names, and location names" + JLABEL_FORMAT_2);
-        JButton joinButton = new JButton("Show all players who are under level");
+        JButton joinButton = new JButton("Show all players who are under a specific level");
         JButton aggregationGroupButton = new JButton(JLABEL_FORMAT_1 + "Show the number of monster<br/>races at each location" + JLABEL_FORMAT_2);
         JButton aggregationHavingButton = new JButton(JLABEL_FORMAT_1 + "Show the numbers of shops at<br/>each location with inventory<br/>" +
                 "amount greater than or equal to 50." + JLABEL_FORMAT_2);
