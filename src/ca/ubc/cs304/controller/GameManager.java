@@ -77,43 +77,48 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
     }
 
 
+    // aggregation with group
 	public ArrayList<LocationRace> countRaceByLocation() {
 		ArrayList<LocationRace> results = dbHandler.countRaceByLocation();
 		return results;
 	}
 
-
+	// nested aggregation
 	public ArrayList<LocationAndPrice> nestedPriceQuery() {
     	ArrayList<LocationAndPrice> results = dbHandler.nestedPriceQuery();
 		return results;
 	}
 
+	// projection
 	public ArrayList<SimplifiedItemModel> projectFromItems() {
     	ArrayList<SimplifiedItemModel> results = dbHandler.projectFromItems();
 		return results;
 	}
 
+	// deletion
 	public void deleteGivenWarrior(String playerID) {
         dbHandler.deleteGivenWarrior(playerID);
     }
 
-
+	// selection
     public ArrayList<Conversation> findPlayersConverses(String date) {
-
         ArrayList<Conversation> results = dbHandler.findPlayersConverses(date);
         return results;
     }
 
-    public ArrayList<Player> findAllPlayersWithLevelsUnder25(int level) {
-        ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder25(level);
+    // join
+    public ArrayList<Player> findAllPlayersWithLevelsUnder(int level) {
+        ArrayList<Player> results = dbHandler.findAllPlayersWithLevelsUnder(level);
         return results;
     }
 
+    // aggregation with having
     public ArrayList<LocationShop> countShopsByLocation() {
         ArrayList<LocationShop> results = dbHandler.countShopsByLocation();
         return results;
     }
 
+    // division
     public ArrayList<Player> findPlayersThatBoughtFromAllLocations() {
         ArrayList<Player> results = dbHandler.findPlayersThatBoughtFromAllLocations();
 		return results;
