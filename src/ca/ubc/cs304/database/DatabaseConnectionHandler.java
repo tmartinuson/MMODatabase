@@ -86,7 +86,6 @@ public class DatabaseConnectionHandler {
     //WORKS
     public ArrayList<Conversation> findPlayersConverses(String date) {
 	    ArrayList<Conversation> result = new ArrayList<Conversation>();
-		date = "2019/01/01"; //TODO: remove hard code date
 	    try {
 			PreparedStatement ps = connection.prepareStatement("SELECT PlayerID, converseDate, NPCName FROM Converses WHERE converseDate > TO_DATE(?, 'yyyy/mm/dd')");
 			ps.setString(1, date);
