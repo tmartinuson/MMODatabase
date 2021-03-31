@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainMenuWindow extends JFrame implements ActionListener {
     // constants
@@ -383,12 +385,20 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
                         if (isAnyStringNullOrEmpty(username, id, money, level, attackPower)) {
                             setupPrintStatements(resultFrame, missingData);
+                        } else if (Pattern.matches("[a-zA-Z]+", id) || Pattern.matches("[a-zA-Z]+", money)
+                                || Pattern.matches("[a-zA-Z]+", level) ||
+                                Pattern.matches("[a-zA-Z]+", attackPower)) {
+                            setupPrintStatements(resultFrame, "Please make sure Player Id, Money, Level, and " +
+                                    "Attack Power are numbers.");
                         } else {
                             delegate.insertAssassinPlayerCharacter(username, id, Integer.parseInt(money),
                                     Integer.parseInt(level), Integer.parseInt(attackPower));
-
-
-                            setupPrintStatements(resultFrame, "New Assassin Player, " + username + " Added!");
+                            insertUsername.setText("");
+                            insertId.setText("");
+                            insertMoney.setText("");
+                            insertLevel.setText("");
+                            insertAttackPower.setText("");
+                            setupPrintStatements(resultFrame, "New Assassin Player, " + username + ", Added!");
                         }
                     }
                 }
@@ -404,8 +414,11 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
                         if (isAnyStringNullOrEmpty(playerId)) {
                             setupPrintStatements(resultFrame, missingData);
+                        } else if (Pattern.matches("[a-zA-Z]+", playerId)) {
+                            setupPrintStatements(resultFrame, "Please make sure Player Id is a number.");
                         } else {
                             delegate.deleteGivenWarrior(playerId);
+                            deletePlayerId.setText("");
                             setupPrintStatements(resultFrame, "Warrior #" + playerId + " Deleted!");
                         }
                     }
@@ -426,6 +439,8 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                             setupPrintStatements(resultFrame, missingData);
                         } else {
                             delegate.updateLocationBiome(location, biome);
+                            updateLocation.setText("");
+                            updateBiome.setText("");
                             setupPrintStatements(resultFrame, "Location's Biome updated!");
                             System.out.println("Location's Biome updated to " + biome + "!");
                         }
@@ -439,11 +454,14 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Player Converses with NPC on Specific Date");
-                        //TODO: Yukie pull in date from field in format yyyy/mm/dd
                         String date = selectDate.getText().trim();
+                        Pattern datePattern = Pattern.compile("\\d{4}/\\d{2}/\\d{2}");
+                        Matcher matcher = datePattern.matcher(date);
 
                         if (isAnyStringNullOrEmpty(date)) {
                             setupPrintStatements(resultFrame, missingData);
+                        } else if (!matcher.find()) {
+                            setupPrintStatements(resultFrame, "Please make sure date is in yyyy/mm/dd.");
                         } else {
                             ArrayList<Conversation> result = delegate.findPlayersConverses(date);
                             String[][] arrayOfItems = new String[result.size()][];
@@ -453,6 +471,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                                 String converseDate = result.get(j).getConverseDate().toString();
                                 arrayOfItems[j] = new String[]{playerId, npcName, converseDate};
                             }
+                            selectDate.setText("");
                             String[] column = {"Player ID", "NPC", "Date Conversed"};
                             setupTable(resultFrame, arrayOfItems, column);
                         }
@@ -469,11 +488,11 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         ArrayList<SimplifiedItemModel> result = delegate.projectFromItems();
                         String[][] arrayOfItems = new String[result.size()][];
                         for (int j = 0; j < arrayOfItems.length; j++) {
-                                String itemId = result.get(j).getId();
-                                String itemStats = result.get(j).getStats();
-                                String shopName = result.get(j).getShopName();
-                                String locationName = result.get(j).getLocationName();
-                                arrayOfItems[j] = new String[]{itemId, itemStats, shopName, locationName};
+                            String itemId = result.get(j).getId();
+                            String itemStats = result.get(j).getStats();
+                            String shopName = result.get(j).getShopName();
+                            String locationName = result.get(j).getLocationName();
+                            arrayOfItems[j] = new String[]{itemId, itemStats, shopName, locationName};
                         }
                         String[] column ={"Item ID","Stats","Shop Name","Location Name"};
                         setupTable(resultFrame, arrayOfItems, column);
@@ -491,7 +510,9 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
                         if (isAnyStringNullOrEmpty(joinlevel)) {
                             setupPrintStatements(resultFrame, missingData);
-                        } else {
+                        } else if (Pattern.matches("[a-zA-Z]+", joinlevel)) {
+                            setupPrintStatements(resultFrame, "Please make sure Level is a number.");
+                        }else {
                             ArrayList<Player> result = delegate.findAllPlayersWithLevelsUnder(Integer.parseInt(joinlevel));
                             String[][] arrayOfItems = new String[result.size()][];
                             for (int j = 0; j < arrayOfItems.length; j++) {
@@ -501,6 +522,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                                 Integer xp = result.get(j).getPlayerXP();
                                 arrayOfItems[j] = new String[]{playerId, username, Integer.toString(level), Integer.toString(xp)};
                             }
+                            joinLevel.setText("");
                             String[] column = {"Id", "Username", "Level", "Threshold XP"};
                             setupTable(resultFrame, arrayOfItems, column);
                         }
