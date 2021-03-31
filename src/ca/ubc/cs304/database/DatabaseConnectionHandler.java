@@ -112,7 +112,6 @@ public class DatabaseConnectionHandler {
     //WORKS
     public ArrayList<Player> findAllPlayersWithLevelsUnder(int level) {
         ArrayList<Player> result = new ArrayList<Player>();
-		level = 16; //TODO: remove hard code!
         try {
 			PreparedStatement ps = connection.prepareStatement("Select id, username, xp.playerlevel, xp.xp from playerxplevel xp, playercharacter p where xp.playerlevel = p.playerlevel and xp.playerlevel < ?");
 			ps.setInt(1, level);
