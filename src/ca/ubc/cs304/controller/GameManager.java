@@ -124,6 +124,12 @@ public class GameManager implements LoginWindowDelegate, TerminalTransactionsDel
 		return results;
 	}
 
+	// display all locations
+    public ArrayList<Location> displayAllLocations() {
+        ArrayList<Location> results = dbHandler.displayAllLocations();
+        return results;
+    }
+
 
 	/**
 	 * TerminalTransactionsDelegate Implementation

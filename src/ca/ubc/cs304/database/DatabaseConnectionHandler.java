@@ -182,6 +182,25 @@ public class DatabaseConnectionHandler {
         return result;
     }
 
+    public ArrayList<Location> displayAllLocations() {
+	    ArrayList<Location> result = new ArrayList<>();
+
+	    try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Locations");
+            while (rs.next()) {
+                Location model = new Location(
+                        rs.getString("LocationName"),
+                        rs.getString("Biome"));
+                result.add(model);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+	    return result;
+    }
+
 	public ArrayList<LocationRace> countRaceByLocation() {
 		ArrayList<LocationRace> result = new ArrayList<LocationRace>();
 
@@ -317,7 +336,7 @@ public class DatabaseConnectionHandler {
 			rollbackConnection();
 		}	
 	}
-	
+
 	public boolean login(String username, String password) {
 		try {
 			if (connection != null) {
