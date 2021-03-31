@@ -29,10 +29,10 @@ CREATE TABLE PlayerXPLevel(
 grant select on PlayerXPLevel to public;
 
 CREATE TABLE PlayerCharacter(
-                                Username VARCHAR(20) UNIQUE,
+                                Username VARCHAR(20) UNIQUE NOT NULL,
                                 ID VARCHAR(10) PRIMARY KEY,
-                                PlayerMoney INTEGER,
-                                PlayerLevel INTEGER DEFAULT 1,
+                                PlayerMoney INTEGER NOT NULL,
+                                PlayerLevel INTEGER NOT NULL,
                                 FOREIGN KEY (PlayerLevel) REFERENCES PlayerXPLevel ON DELETE CASCADE
 );
 
@@ -40,7 +40,7 @@ grant select on PlayerCharacter to public;
 
 CREATE TABLE Assassin(
                          ID VARCHAR(10) PRIMARY KEY,
-                         AttackPower INTEGER,
+                         AttackPower INTEGER NOT NULL,
                          FOREIGN KEY (ID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
@@ -50,7 +50,7 @@ grant select on Assassin to public;
 
 CREATE TABLE Warrior(
                         ID VARCHAR(10) PRIMARY KEY,
-                        DefensePower INTEGER,
+                        DefensePower INTEGER NOT NULL,
                         FOREIGN KEY (ID) REFERENCES PlayerCharacter ON DELETE CASCADE
 );
 
@@ -86,7 +86,7 @@ grant select on NPCQuestXP to public;
 
 CREATE TABLE Locations(
                           LocationName VARCHAR(20) PRIMARY KEY,
-                          Biome VARCHAR(20)
+                          Biome VARCHAR(20) NOT NULL
 );
 
 grant select on Locations to public;
