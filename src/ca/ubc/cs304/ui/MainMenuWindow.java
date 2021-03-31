@@ -189,35 +189,35 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
         // place the text field for the username
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertUsername, c);
         contentPane.add(insertUsername);
 
         // place the text field for the id
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertId, c);
         contentPane.add(insertId);
 
         // place the text field for the money
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertMoney, c);
         contentPane.add(insertMoney);
 
         // place the text field for the xp
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertLevel, c);
         contentPane.add(insertLevel);
 
         // place the text field for the attackPower
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertAttackPower, c);
         contentPane.add(insertAttackPower);
@@ -225,7 +225,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         // place branchId Label
         c.gridx = 1;
         c.gridy+=2;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         gb.setConstraints(playerIdLabel, c);
         contentPane.add(playerIdLabel);
 
@@ -240,7 +240,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
         // place the text field for the branchID
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(deletePlayerId, c);
         contentPane.add(deletePlayerId);
@@ -248,13 +248,13 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         // place location Label
         c.gridx = 1;
         c.gridy+=2;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         gb.setConstraints(locationLabel, c);
         contentPane.add(locationLabel);
 
         // place biome Label
         c.gridx++;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         gb.setConstraints(biomeLabel, c);
         contentPane.add(biomeLabel);
 
@@ -267,16 +267,16 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         gb.setConstraints(updateButton, c);
         contentPane.add(updateButton);
 
-        // the text field for the location
+        // the drop down for the location
         c.gridx = 1;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(0, 10, 5, 0);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(locationDropDown, c);
         contentPane.add(locationDropDown);
 
         // the text field for the biome
         c.gridx++;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(updateBiome, c);
         contentPane.add(updateBiome);
@@ -294,7 +294,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
         // place the select date label
         c.gridx+=2;
-        c.insets = new Insets(5, 10, 10, 10);
+        c.insets = new Insets(5, 10, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(dateLabel, c);
         contentPane.add(dateLabel);
@@ -441,7 +441,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 }
         );
 
-        // TODO: put dropdown menu for locations
         updateButton.addActionListener(
                 new ActionListener() {
                     @Override
