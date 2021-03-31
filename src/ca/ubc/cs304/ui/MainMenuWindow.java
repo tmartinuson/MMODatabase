@@ -25,11 +25,11 @@ public class MainMenuWindow extends JFrame implements ActionListener {
     private JTextField insertLevel;
     private JTextField insertAttackPower;
     private JTextField deletePlayerId;
-    private JTextField updateLocation;
     private JTextField updateBiome;
     private JTextField selectDate;
     private JTextField joinLevel;
     private JLabel resultsLabel = new JLabel("");
+    private String currentLocation = "Ludi";
 
     // delegate
     private GameManager delegate;
@@ -79,10 +79,13 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         insertLevel = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         insertAttackPower = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         deletePlayerId = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
-        updateLocation = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         updateBiome = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         selectDate = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
         joinLevel = new JTextField(LoginWindow.TEXT_FIELD_WIDTH);
+
+        // for dropdown menu
+        String[] locations = {"Ludi", "Kerning", "Ellinia", "Henney", "Perion"};
+        final JComboBox<String> locationDropDown = new JComboBox<String>(locations);
 
         // TODO make a forloop for this
         // set font
@@ -90,6 +93,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         insertButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         deleteButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         updateButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
+        locationDropDown.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         selectButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         projectButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
         joinButton.setFont(LoginWindow.LUCIDA_SANS_UNICODE);
@@ -104,6 +108,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         insertButton.setBackground(LoginWindow.LIGHT_BLUE);
         deleteButton.setBackground(LoginWindow.LIGHT_BLUE);
         updateButton.setBackground(LoginWindow.LIGHT_BLUE);
+        locationDropDown.setBackground(LoginWindow.LIGHT_BLUE);
         selectButton.setBackground(LoginWindow.LIGHT_BLUE);
         projectButton.setBackground(LoginWindow.LIGHT_BLUE);
         joinButton.setBackground(LoginWindow.LIGHT_BLUE);
@@ -184,35 +189,35 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
         // place the text field for the username
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertUsername, c);
         contentPane.add(insertUsername);
 
         // place the text field for the id
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertId, c);
         contentPane.add(insertId);
 
         // place the text field for the money
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertMoney, c);
         contentPane.add(insertMoney);
 
         // place the text field for the xp
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertLevel, c);
         contentPane.add(insertLevel);
 
         // place the text field for the attackPower
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(insertAttackPower, c);
         contentPane.add(insertAttackPower);
@@ -220,7 +225,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         // place branchId Label
         c.gridx = 1;
         c.gridy+=2;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         gb.setConstraints(playerIdLabel, c);
         contentPane.add(playerIdLabel);
 
@@ -235,7 +240,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
         // place the text field for the branchID
         c.gridx++;
-        c.insets = new Insets(10, 0, 5, 10);
+        c.insets = new Insets(5, 0, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(deletePlayerId, c);
         contentPane.add(deletePlayerId);
@@ -243,13 +248,13 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         // place location Label
         c.gridx = 1;
         c.gridy+=2;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         gb.setConstraints(locationLabel, c);
         contentPane.add(locationLabel);
 
         // place biome Label
         c.gridx++;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         gb.setConstraints(biomeLabel, c);
         contentPane.add(biomeLabel);
 
@@ -262,16 +267,16 @@ public class MainMenuWindow extends JFrame implements ActionListener {
         gb.setConstraints(updateButton, c);
         contentPane.add(updateButton);
 
-        // the text field for the location
+        // the drop down for the location
         c.gridx = 1;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(0, 10, 5, 0);
         c.anchor = GridBagConstraints.CENTER;
-        gb.setConstraints(updateLocation, c);
-        contentPane.add(updateLocation);
+        gb.setConstraints(locationDropDown, c);
+        contentPane.add(locationDropDown);
 
         // the text field for the biome
         c.gridx++;
-        c.insets = new Insets(10, 10, 5, 0);
+        c.insets = new Insets(5, 10, 5, 0);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(updateBiome, c);
         contentPane.add(updateBiome);
@@ -289,7 +294,7 @@ public class MainMenuWindow extends JFrame implements ActionListener {
 
         // place the select date label
         c.gridx+=2;
-        c.insets = new Insets(5, 10, 10, 10);
+        c.insets = new Insets(5, 10, 5, 10);
         c.anchor = GridBagConstraints.CENTER;
         gb.setConstraints(dateLabel, c);
         contentPane.add(dateLabel);
@@ -411,7 +416,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Delete Warrior Player");
                         String playerId = deletePlayerId.getText().trim();
-
                         if (isAnyStringNullOrEmpty(playerId)) {
                             setupPrintStatements(resultFrame, missingData);
                         } else if (Pattern.matches("[a-zA-Z]+", playerId)) {
@@ -425,24 +429,31 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                 }
         );
 
-        // TODO: put dropdown menu for locations
+        locationDropDown.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JComboBox locationJCB = (JComboBox)e.getSource();
+                        String location = (String)locationJCB.getSelectedItem();
+                        currentLocation = location;
+                    }
+                }
+        );
+
         updateButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Update Location's Biome");
-                        String location = updateLocation.getText().trim();
                         String biome = updateBiome.getText().trim();
 
-                        if (isAnyStringNullOrEmpty(location, biome)) {
+                        if (isAnyStringNullOrEmpty(currentLocation, biome)) {
                             setupPrintStatements(resultFrame, missingData);
                         } else {
-                            delegate.updateLocationBiome(location, biome);
-                            updateLocation.setText("");
+                            delegate.updateLocationBiome(currentLocation, biome);
                             updateBiome.setText("");
                             setupPrintStatements(resultFrame, "Location's Biome updated!");
-                            System.out.println("Location's Biome updated to " + biome + "!");
                         }
                     }
                 }
@@ -594,7 +605,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
                         JFrame resultFrame = createResultsPane();
                         resultFrame.setTitle("Players That Bought From All Locations");
                         ArrayList<Player> result = delegate.findPlayersThatBoughtFromAllLocations();
-                        System.out.println(result);
 
                         String[][] arrayOfItems = new String[result.size()][];
                         for (int j = 0; j < arrayOfItems.length; j++) {
@@ -666,7 +676,6 @@ public class MainMenuWindow extends JFrame implements ActionListener {
     }
 
     private void handleQuitOption() {
-        System.out.println("Good Bye!");
         delegate.terminalTransactionsFinished();
     }
 
