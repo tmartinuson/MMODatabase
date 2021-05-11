@@ -20,5 +20,5 @@ Delete: Select * from warrior;
 Update: Select * from locations;
 
 Disclaimer:
-We do not authorize the use or any heavily borrowed elements from this project to be used by any other students taking CPSC 304 and/or other courses taken at UBC.
+We do not authorize the use of or any heavily borrowed elements from this project to be used by any other students enrolled in CPSC 304 and/or other courses taken at UBC.
 
